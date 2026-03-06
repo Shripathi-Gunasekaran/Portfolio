@@ -1,0 +1,12 @@
+{
+  "name": "professional-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Professional portfolio site",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "pdf-parse": "^2.4.5"
+  }
+}
