@@ -11,7 +11,7 @@ export const personalInfo = {
   email: "shrisekar3@gmail.com",
   github: "https://github.com/Shripathi-Gunasekaran",
   linkedin: "https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1",
-  resume: "/Shri_Pathi_Software_Engineer.pdf",
+  resume: "/assets/Shri_Pathi%20Software_Engineer.pdf",
   profileImage: "/profile.jpg",
   logoImage: "/name.png"
 };
