@@ -1,168 +1,336 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Shri Pathi G - Aspiring Software Engineer portfolio" />
-  <title>Shri Pathi G | Portfolio</title>
+  <meta name="description" content="Shri Pathi G - Software Engineer Portfolio" />
+  <title>Shri Pathi G | Software Engineer Portfolio</title>
+  
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/png" href="assets/name.png" />
 </head>
 <body>
-  <div class="mesh mesh-a" aria-hidden="true"></div>
-  <div class="mesh mesh-b" aria-hidden="true"></div>
 
-  <header class="site-header" id="top">
-    <div class="container nav-wrap">
-      <a href="index.html" class="brand" aria-label="Shri Pathi G home"><img src="assets/name.png" alt="Shri Pathi G logo" class="brand-logo" /></a>
-      <div class="nav-right">
-        <nav class="site-nav" aria-label="Primary navigation">
-          <a href="index.html">Home</a>
-          <a href="skills.html">Skills</a>
-          <a href="projects.html">Projects</a>
-          <a href="experience.html">Experience</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-        <form class="header-search" role="search" aria-label="Site search">
-          <input type="search" name="q" placeholder="Search pages" aria-label="Search pages" />
-          <button type="submit">Search</button>
-        </form>
-        <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
+  <!-- Custom Animated Cursor Elements -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-circle" id="cursorCircle"></div>
+
+  <!-- VFX Preloader Template Animation -->
+  <div id="preloader" class="vfx-preloader">
+    <canvas id="preloaderCanvas" class="preloader-canvas"></canvas>
+    <div class="preloader-bg-overlay"></div>
+
+    <div class="vfx-preloader-content">
+      <div class="hud-frame">
+        <div class="hud-corner hud-top-left"></div>
+        <div class="hud-corner hud-top-right"></div>
+        <div class="hud-corner hud-bottom-left"></div>
+        <div class="hud-corner hud-bottom-right"></div>
+
+        <div class="logo-vfx-wrap">
+          <img src="assets/name.png" alt="ShriPathiG Logo" class="vfx-logo-img" />
+          <div class="vfx-scanline"></div>
+        </div>
       </div>
+
+      <div class="vfx-status-text">
+        <span class="vfx-tag">SYSTEM.INITIALIZING //</span>
+        <span id="vfxPercent" class="vfx-percent">0%</span>
+      </div>
+
+      <div class="vfx-progress-bar">
+        <div id="preloaderProgress" class="vfx-progress-fill">
+          <div class="vfx-spark-head"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#home" class="brand-logo">
+        <img src="assets/name.png" alt="Shri Pathi Logo" onerror="this.style.display='none'; document.getElementById('logoText').style.display='block';" />
+        <span id="logoText" class="hidden-fallback">Shri Pathi<span class="brand-dot">.</span></span>
+      </a>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#features" class="nav-link">Services</a></li>
+          <li><a href="#experience" class="nav-link">Experience</a></li>
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#achievements" class="nav-link">Achievements</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">☰</button>
     </div>
   </header>
 
   <main>
-    <section class="section hero">
-      <div class="container home-hero-grid">
-        <div class="hero-copy reveal">
-          <p class="tag">Software Engineering • Data Analytics • Cloud</p>
-          <h1>I build focused, reliable software experiences from idea to execution.</h1>
-          <p>
-            I am Shri Pathi G, a Computer Science and Engineering student who combines programming fundamentals,
-            analytics thinking, and cloud exposure to deliver practical results through projects and internships.
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="hero-subtag">Hello <span class="dot">.</span></div>
+          <h1 class="hero-title">
+            I'm <span id="personalName">Shri Pathi G</span>
+            <span class="highlight" id="heroRole">Software Engineer</span>
+          </h1>
+          <p class="hero-description" id="heroTagline">
+            Aspiring Software Engineer specializing in Full Stack Development, Data Analytics, and AI & Automation.
           </p>
+
           <div class="hero-actions">
-            <a class="btn btn-primary" href="projects.html">Explore Projects</a>
-            <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Download Resume</a>
+            <a href="#contact" class="btn btn-primary">Got a project?</a>
+            <a href="assets/Shri_Pathi Software_Engineer.pdf" target="_blank" rel="noopener" class="btn btn-outline" id="resumeBtn">My resume</a>
           </div>
-          <ul class="quick-links">
-            <li><a href="mailto:shrisekar3@gmail.com">shrisekar3@gmail.com</a></li>
-            <li><a href="tel:+919344752868">+91 93447 52868</a></li>
-            <li><a href="https://github.com/Shripathi-Gunasekaran" target="_blank" rel="noopener">GitHub</a></li>
-            <li><a href="https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1" target="_blank" rel="noopener">LinkedIn</a></li>
-          </ul>
         </div>
 
-        <aside class="hero-panel reveal delay-1" aria-label="Profile summary">
-          <figure class="profile-photo-wrap">
-            <img
-              class="profile-photo"
-              src="assets/profile.jpg"
-              alt="Portrait of Shri Pathi G"
-              onerror="this.onerror=null;this.src='assets/profile-placeholder.svg';"
-            />
-          </figure>
-          <h2>At a Glance</h2>
-          <div class="home-snapshot">
-            <p><span>Degree</span> B.E. Computer Science and Engineering (2022 - 2026)</p>
-            <p><span>Focus</span> Software, Analytics, Cloud Foundations</p>
-            <p><span>Projects</span> IoT Systems + Power BI Dashboards</p>
-            <p><span>Location</span> Tamil Nadu, India</p>
+        <div class="hero-avatar-wrap">
+          <div class="avatar-halo">
+            <img src="assets/profile.jpg" alt="Shri Pathi G" class="avatar-img" id="heroAvatar" />
           </div>
-        </aside>
+        </div>
+      </div>
+
+      <!-- Tech Stack Marquee -->
+      <div class="tech-ticker">
+        <div class="ticker-track" id="tickerTrack">
+          <!-- Dynamically populated continuous marquee -->
+        </div>
       </div>
     </section>
 
-    <section class="section home-stats-section">
-      <div class="container home-stats">
-        <article class="card reveal">
-          <p class="metric">4+</p>
-          <p>Major Technical Projects</p>
-        </article>
-        <article class="card reveal delay-1">
-          <p class="metric">3</p>
-          <p>Industry Internships</p>
-        </article>
-        <article class="card reveal delay-2">
-          <p class="metric">6+</p>
-          <p>Certifications & Workshops</p>
-        </article>
-        <article class="card reveal delay-3">
-          <p class="metric">1st</p>
-          <p>AI Tech Expo Recognition</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section">
+    <!-- Features / What I Do Section -->
+    <section class="features-section" id="features">
       <div class="container">
-        <p class="tag reveal">Focus Areas</p>
-        <h2 class="reveal">What I bring to teams</h2>
-        <div class="home-feature-grid">
-          <article class="card reveal">
-            <h3>Technical Skills</h3>
-            <p>Java, React, AWS, Docker, Power BI, Tableau, and modern AI tooling.</p>
-            <a class="btn btn-ghost" href="skills.html">See Skills</a>
-          </article>
-          <article class="card reveal delay-1">
-            <h3>Project Delivery</h3>
-            <p>IoT-based systems and dashboard solutions built with measurable outcomes.</p>
-            <a class="btn btn-ghost" href="projects.html">See Projects</a>
-          </article>
-          <article class="card reveal delay-2">
-            <h3>Experience & Certifications</h3>
-            <p>Internship exposure in AI/ML and cloud with active certification progress.</p>
-            <a class="btn btn-ghost" href="experience.html">See Experience</a>
-          </article>
+        <span class="section-tag">FEATURES</span>
+        <h2 class="section-heading">What I Do</h2>
+
+        <div class="features-grid" id="featuresGrid">
+          <!-- Dynamically populated -->
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container split">
-        <div class="reveal">
-          <p class="tag">Work Style</p>
-          <h2>Structured process, practical outcomes.</h2>
-          <p>I work with clarity and momentum: understand requirements, build iteratively, and validate results.</p>
+    <!-- About Section -->
+    <section class="about-section" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-content full-width">
+            <span class="section-tag">ABOUT ME</span>
+            <h2 class="section-heading">Shri Pathi G</h2>
+            <div class="about-location" id="aboutLocation">
+            💼 Software Engineer / QA Engineer / Data Analyst
+            </div>
+            
+            <p class="about-bio about-bio" id="aboutBio">
+              I am a Computer Science Engineering graduate with hands-on experience in software development, testing, IoT, and data analytics. During my internship at Yectra Technologies, I worked on real-time projects involving frontend development, API integration, and software testing. I am passionate about building practical solutions, learning emerging technologies, and contributing to impactful projects.
+            </p>
+
+            <div class="stats-grid" id="statsGrid">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
         </div>
-        <div class="process-grid reveal delay-1">
-          <article class="process-step">
-            <span>01</span>
-            <h3>Analyze</h3>
-            <p>Break down requirements and identify key technical constraints.</p>
-          </article>
-          <article class="process-step">
-            <span>02</span>
-            <h3>Build</h3>
-            <p>Develop with reusable patterns and clear code structure.</p>
-          </article>
-          <article class="process-step">
-            <span>03</span>
-            <h3>Improve</h3>
-            <p>Refine with feedback, performance checks, and presentation quality.</p>
-          </article>
+      </div>
+    </section>
+
+    <!-- Categorized Skills Section -->
+    <section class="features-section section-bg-dark" id="skills">
+      <div class="container">
+        <div class="section-header-center">
+          <span class="section-tag">TECHNICAL SKILLS</span>
+          <h2 class="section-heading">Core Skills & Expertise</h2>
+        </div>
+
+        <div id="categorizedSkillsGrid" class="skill-grid-layout">
+          <!-- Dynamically populated from script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Professional Experience, Education & Leadership Section -->
+    <section class="experience-section" id="experience">
+      <div class="container">
+        <div class="section-header-center">
+          <span class="section-tag">CAREER PATH</span>
+          <h2 class="section-heading">Professional Experience & Education</h2>
+        </div>
+
+        <div class="experience-grid-layout">
+          <div>
+            <h3 class="section-heading-red">💼 Professional Internships</h3>
+            <div class="timeline-grid" id="experienceGrid">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div>
+            <h3 class="section-heading-blue">🎓 Education</h3>
+            <div class="timeline-grid" id="educationGrid">
+              <!-- Dynamically populated -->
+            </div>
+
+            <h3 class="section-heading-green">🏛️ Leadership & Campus Activities</h3>
+            <div class="timeline-card timeline-card-green">
+              <div class="timeline-header">
+                <div>
+                  <h3 class="timeline-role timeline-role-large">Hostel Welfare Committee Member</h3>
+                  <div class="timeline-company timeline-company-green">Dr. Mahalingam College of Engineering and Technology</div>
+                </div>
+                <span class="timeline-period">2023 – Present</span>
+              </div>
+              <p class="timeline-desc">Coordinated student activities, addressed student concerns, and supported hostel administration.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Projects & Records Section -->
+    <section class="portfolio-section" id="projects">
+      <div class="container">
+        <div class="section-header-center">
+          <span class="section-tag">PROJECTS & RESEARCH</span>
+          <h2 class="section-heading">Featured Projects & Records</h2>
+        </div>
+
+        <div class="achievements-grid" id="projectsGrid">
+          <!-- Dynamically populated from data.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements & Certifications Section -->
+    <section class="features-section section-bg-darker" id="achievements">
+      <div class="container">
+        <div class="section-header-center">
+          <span class="section-tag">HONORS & CERTIFICATIONS</span>
+          <h2 class="section-heading">Achievements & Credentials</h2>
+        </div>
+
+        <div class="achievements-grid" id="achievementsGrid">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonial-section" id="testimonials">
+      <div class="container">
+        <div class="section-header-center">
+          <span class="section-tag">TESTIMONIAL</span>
+          <h2 class="section-heading">WHAT MENTORS SAY</h2>
+        </div>
+
+        <div class="testimonial-card">
+          <div id="testimonialContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <div class="slider-controls">
+          <button class="slider-btn" id="prevTestimonial" aria-label="Previous Testimonial">‹</button>
+          <button class="slider-btn" id="nextTestimonial" aria-label="Next Testimonial">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <span class="section-tag">Contacts</span>
+            <h2 class="contact-info-title">Have a project?<br />Let's talk!</h2>
+            <p class="contact-info-desc">
+              I am available for full-time software engineering roles and project collaborations. Feel free to connect!
+            </p>
+
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon">📞</div>
+              <div>
+                <strong>Phone</strong><br />
+                <a href="tel:9344752868">+91 9344752868</a>
+              </div>
+            </div>
+
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon">✉</div>
+              <div>
+                <strong>Email</strong><br />
+                <a href="mailto:shrisekar3@gmail.com" id="contactEmail">shrisekar3@gmail.com</a>
+              </div>
+            </div>
+
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon">📍</div>
+              <div>
+                <strong>Location</strong><br />
+                Tamil Nadu, India
+              </div>
+            </div>
+          </div>
+
+          <form class="contact-form" id="contactForm">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" class="form-control" placeholder="Your Name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="form-control" placeholder="Your Email Address" required />
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" class="form-control" placeholder="Tell me about your project..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Send Message →</button>
+            <div id="formStatus" class="form-status-hidden"></div>
+          </form>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container foot-wrap">
-      <p>© <span id="year"></span> Shri Pathi G</p>
-      <a href="contact.html">Contact</a>
-    </div>
-    <div class="container foot-nav">
-      <a href="index.html">Home</a>
-      <a href="skills.html">Skills</a>
-      <a href="projects.html">Projects</a>
-      <a href="experience.html">Experience</a>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="brand-logo">
+          <img src="assets/name.png" alt="Shri Pathi Logo" class="footer-logo-img" />
+        </div>
+        <p class="footer-tagline">Building scalable, elegant digital solutions.</p>
+
+        <div class="footer-socials">
+          <a href="mailto:shrisekar3@gmail.com" class="social-circle" aria-label="Email">✉</a>
+          <a href="https://github.com/Shripathi-Gunasekaran" target="_blank" rel="noopener" class="social-circle" aria-label="GitHub">GH</a>
+          <a href="https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1" target="_blank" rel="noopener" class="social-circle" aria-label="LinkedIn">IN</a>
+        </div>
+
+        <div class="footer-copy">
+          © 2026 Shri Pathi G. All rights reserved.
+        </div>
+      </div>
     </div>
   </footer>
 
+  <!-- Scripts -->
+  <script src="data.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

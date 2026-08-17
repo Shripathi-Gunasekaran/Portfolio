@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 8080;
+let PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
 
 const MIME_TYPES = {
@@ -15,7 +15,12 @@ const MIME_TYPES = {
   '.jpeg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
-  '.txt': 'text/plain; charset=utf-8'
+  '.txt': 'text/plain; charset=utf-8',
+  '.webp': 'image/webp',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf',
+  '.pdf': 'application/pdf'
 };
 
 function sendFile(filePath, res) {
@@ -56,6 +61,17 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Portfolio server running at http://localhost:${PORT}`);
-});
+function startServer(portToTry) {
+  server.listen(portToTry, () => {
+    console.log(`Portfolio server running at http://localhost:${portToTry}`);
+  }).on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`Port ${portToTry} in use, trying ${portToTry + 1}...`);
+      startServer(portToTry + 1);
+    } else {
+      console.error(err);
+    }
+  });
+}
+
+startServer(PORT);

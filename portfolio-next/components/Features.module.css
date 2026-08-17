@@ -1,0 +1,139 @@
+.section {
+  background: #111;
+  padding: 5rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.sectionLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.labelLine {
+  display: block;
+  width: 30px;
+  height: 2px;
+  background: #e8394a;
+  border-radius: 2px;
+}
+
+.labelText {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e8394a;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 3rem;
+  letter-spacing: -0.02em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+}
+
+.card {
+  position: relative;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 1.8rem 1.4rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  cursor: default;
+}
+
+.card:hover {
+  border-color: #e8394a;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(232, 57, 74, 0.15);
+}
+
+.cardActive {
+  background: #e8394a;
+  border-color: #e8394a;
+}
+
+.cardActive .iconWrap {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cardActive .cardTitle,
+.cardActive .cardDesc {
+  color: #fff;
+}
+
+.cardActive .cardDesc {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.iconWrap {
+  width: 48px;
+  height: 48px;
+  background: rgba(232, 57, 74, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+  font-size: 1.4rem;
+  transition: background 0.3s;
+}
+
+.card:hover:not(.cardActive) .iconWrap {
+  background: rgba(232, 57, 74, 0.15);
+}
+
+.cardTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.cardDesc {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.7;
+}
+
+.cardCorner {
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(232, 57, 74, 0.06);
+  transition: all 0.3s ease;
+}
+
+.card:hover .cardCorner {
+  width: 100px;
+  height: 100px;
+  background: rgba(232, 57, 74, 0.08);
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+  .grid { grid-template-columns: 1fr; }
+}
