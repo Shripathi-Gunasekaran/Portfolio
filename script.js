@@ -389,14 +389,58 @@ document.addEventListener('DOMContentLoaded', () => {
      ───────────────────────────────────────────────────────────── */
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const status = document.getElementById('formStatus');
+      const name = document.getElementById('name');
+      const email = document.getElementById('email');
+      const message = document.getElementById('message');
+
+      if (!status || !name || !email || !message) return;
+
+      const payload = {
+        name: name.value.trim(),
+        email: email.value.trim(),
+        subject: document.getElementById('subject') ? document.getElementById('subject').value.trim() : 'Portfolio contact',
+        message: message.value.trim()
+      };
+
+      if (!payload.name || !payload.email || !payload.message) {
+        status.style.display = 'block';
+        status.style.color = '#fbbf24';
+        status.textContent = 'Please fill in your name, email, and message.';
+        return;
+      }
+
       status.style.display = 'block';
-      status.style.color = '#4ade80';
-      status.textContent = 'Thank you! Your message has been sent successfully.';
-      contactForm.reset();
-      setTimeout(() => { status.style.display = 'none'; }, 4000);
+      status.style.color = '#f3f4f6';
+      status.textContent = 'Sending your message...';
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || 'Unable to send message.');
+        }
+
+        status.style.color = '#4ade80';
+        status.textContent = result.message || 'Thank you! Your message has been sent successfully.';
+        contactForm.reset();
+      } catch (error) {
+        status.style.color = '#f87171';
+        status.textContent = error.message || 'Something went wrong. Please try again.';
+      }
+
+      setTimeout(() => {
+        status.style.display = 'none';
+      }, 5000);
     });
   }
 

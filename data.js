@@ -12,8 +12,8 @@ const PORTFOLIO_DATA = {
     email: "shrisekar3@gmail.com",
     github: "https://github.com/Shripathi-Gunasekaran",
     linkedin: "https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1",
-    resume: "assets/Shri_Pathi%20Software_Engineer.pdf",
-    avatar: "assets/profile.jpg",
+    resume: "assets/Shri_Pathi Software_Engineer.pdf",
+    avatar: "assets/image.png",
     logo: "assets/name.png"
   },
 
