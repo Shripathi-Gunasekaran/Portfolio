@@ -19,7 +19,7 @@ const PORTFOLIO_DATA = {
 
   leadership: {
     title: "Hostel Welfare Committee Member",
-    period: "2023 – Present",
+    period: "2023 – 2025",
     institution: "Dr. Mahalingam College of Engineering and Technology",
     contribution: "Coordinated student activities, addressed student concerns, and supported hostel administration."
   },
@@ -51,7 +51,7 @@ const PORTFOLIO_DATA = {
       icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
       title: "Full-Stack Development",
       description: "Building modern, responsive web applications using React, Next.js, TypeScript, Python, and RESTful APIs.",
-      featured: true
+      featured: false
     },
     {
       id: "testing",
@@ -86,7 +86,7 @@ const PORTFOLIO_DATA = {
     {
       role: "Power BI Intern",
       company: "Cognifyz",
-      period: "2025",
+      period: "Oct 2025 – Nov 2025",
       description: "Developed interactive Power BI dashboards for data analytics, visualization, and business intelligence insights."
     },
     {

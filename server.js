@@ -159,101 +159,106 @@ function sendFile(filePath, res) {
   });
 }
 
-const server = http.createServer(async (req, res) => {
-  if (req.method === 'OPTIONS') {
-    sendJson(res, 200, { ok: true });
-    return;
-  }
-
-  const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-
-  if (req.method === 'POST' && url.pathname === '/api/contact') {
-    try {
-      const payload = await parseBody(req);
-      const name = String(payload.name || '').trim();
-      const email = String(payload.email || '').trim();
-      const subject = String(payload.subject || '').trim();
-      const message = String(payload.message || '').trim();
-
-      if (!name || !email || !message) {
-        sendJson(res, 400, {
-          success: false,
-          message: 'Name, email, and message are required.'
-        });
-        return;
-      }
-
-      ensureDataFile();
-      const messages = readMessages();
-      const record = {
-        id: crypto.randomUUID(),
-        name,
-        email,
-        subject: subject || 'Portfolio contact message',
-        message,
-        createdAt: new Date().toISOString()
-      };
-
-      messages.push(record);
-      writeMessages(messages);
-
-      try {
-        const emailResult = await sendContactEmail(record);
-        sendJson(res, 200, {
-          success: true,
-          message: 'Your message has been sent successfully.',
-          delivery: emailResult.status
-        });
-      } catch (error) {
-        console.error('Email delivery failed:', error.message);
-        sendJson(res, 200, {
-          success: true,
-          message: 'Your message has been saved successfully.',
-          delivery: 'saved-only'
-        });
-      }
-    } catch (error) {
-      console.error('Contact submission error:', error.message);
-      sendJson(res, 500, {
-        success: false,
-        message: 'Something went wrong while sending your message.'
-      });
-    }
-    return;
-  }
-
-  const cleanUrl = url.pathname.split('?')[0];
-  const requestPath = cleanUrl === '/' ? '/index.html' : cleanUrl;
-  const normalized = path.normalize(requestPath).replace(/^([.][.][/\\])+/, '');
-  const filePath = path.join(ROOT, normalized);
-
-  if (!filePath.startsWith(ROOT)) {
-    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end('403 Forbidden');
-    return;
-  }
-
-  fs.stat(filePath, (err, stats) => {
-    if (err || !stats.isFile()) {
-      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('404 Not Found');
+function createAppServer() {
+  return http.createServer(async (req, res) => {
+    if (req.method === 'OPTIONS') {
+      sendJson(res, 200, { ok: true });
       return;
     }
 
-    sendFile(filePath, res);
+    const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+
+    if (req.method === 'POST' && url.pathname === '/api/contact') {
+      try {
+        const payload = await parseBody(req);
+        const name = String(payload.name || '').trim();
+        const email = String(payload.email || '').trim();
+        const subject = String(payload.subject || '').trim();
+        const message = String(payload.message || '').trim();
+
+        if (!name || !email || !message) {
+          sendJson(res, 400, {
+            success: false,
+            message: 'Name, email, and message are required.'
+          });
+          return;
+        }
+
+        ensureDataFile();
+        const messages = readMessages();
+        const record = {
+          id: crypto.randomUUID(),
+          name,
+          email,
+          subject: subject || 'Portfolio contact message',
+          message,
+          createdAt: new Date().toISOString()
+        };
+
+        messages.push(record);
+        writeMessages(messages);
+
+        try {
+          const emailResult = await sendContactEmail(record);
+          sendJson(res, 200, {
+            success: true,
+            message: 'Your message has been sent successfully.',
+            delivery: emailResult.status
+          });
+        } catch (error) {
+          console.error('Email delivery failed:', error.message);
+          sendJson(res, 200, {
+            success: true,
+            message: 'Your message has been saved successfully.',
+            delivery: 'saved-only'
+          });
+        }
+      } catch (error) {
+        console.error('Contact submission error:', error.message);
+        sendJson(res, 500, {
+          success: false,
+          message: 'Something went wrong while sending your message.'
+        });
+      }
+      return;
+    }
+
+    const cleanUrl = url.pathname.split('?')[0];
+    const requestPath = cleanUrl === '/' ? '/index.html' : cleanUrl;
+    const normalized = path.normalize(requestPath).replace(/^([.][.][/\\])+/, '');
+    const filePath = path.join(ROOT, normalized);
+
+    if (!filePath.startsWith(ROOT)) {
+      res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('403 Forbidden');
+      return;
+    }
+
+    fs.stat(filePath, (err, stats) => {
+      if (err || !stats.isFile()) {
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('404 Not Found');
+        return;
+      }
+
+      sendFile(filePath, res);
+    });
   });
-});
+}
 
 function startServer(portToTry) {
+  const server = createAppServer();
+
   server.listen(portToTry, () => {
     console.log(`Portfolio server running at http://localhost:${portToTry}`);
   }).on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
       console.log(`Port ${portToTry} in use, trying ${portToTry + 1}...`);
       startServer(portToTry + 1);
-    } else {
-      console.error(err);
+      return;
     }
+
+    console.error(err);
   });
 }
 

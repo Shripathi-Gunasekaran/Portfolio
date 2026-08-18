@@ -18,7 +18,7 @@ export const personalInfo = {
 
 export const leadershipInfo = {
   title: "Hostel Welfare Committee Member",
-  period: "2023 – Present",
+  period: "2023 – 2025",
   institution: "Dr. Mahalingam College of Engineering and Technology",
   contribution: "Coordinated student activities, addressed student concerns, and supported hostel administration."
 };
@@ -54,7 +54,7 @@ export const experienceData = [
   {
     role: "Power BI Intern",
     company: "Cognifyz",
-    period: "2025",
+    period: "Oct 2025 – Nov 2025",
     description: "Developed interactive Power BI dashboards for data analytics, visualization, and business intelligence insights."
   },
   {
