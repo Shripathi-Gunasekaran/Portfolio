@@ -3,135 +3,139 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Shri Pathi G internships and experience" />
+  <meta name="description" content="Experience & Education - Shri Pathi G" />
   <title>Experience | Shri Pathi G</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/png" href="assets/name.png" />
 </head>
 <body>
-  <!-- Preloader -->
-  <div class="preloader">
-    <div class="loader-content">
-      <div class="hex-spinner"></div>
-      <div class="loader-text">SYSTEM.BOOT()</div>
+
+  <!-- Custom Animated Cursor Elements -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-circle" id="cursorCircle"></div>
+
+  <!-- VFX Preloader -->
+  <div id="preloader" class="vfx-preloader">
+    <canvas id="preloaderCanvas" class="preloader-canvas"></canvas>
+    <div class="preloader-bg-overlay"></div>
+
+    <div class="vfx-preloader-content">
+      <div class="hud-frame">
+        <div class="hud-corner hud-top-left"></div>
+        <div class="hud-corner hud-top-right"></div>
+        <div class="hud-corner hud-bottom-left"></div>
+        <div class="hud-corner hud-bottom-right"></div>
+
+        <div class="logo-vfx-wrap">
+          <img src="assets/name.png" alt="ShriPathiG Logo" class="vfx-logo-img" />
+          <div class="vfx-scanline"></div>
+        </div>
+      </div>
+
+      <div class="vfx-status-text">
+        <span class="vfx-tag">SYSTEM.INITIALIZING //</span>
+        <span id="vfxPercent" class="vfx-percent">0%</span>
+      </div>
+
+      <div class="vfx-progress-bar">
+        <div id="preloaderProgress" class="vfx-progress-fill">
+          <div class="vfx-spark-head"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- VFX Elements -->
-  <div class="cursor-glow"></div>
-  <div class="page-transition"></div>
-  
-  <div class="bg-mesh">
-    <div class="bg-orb bg-orb--2 bg-orb--2-experience"></div>
-  </div>
-
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <a href="index.html" class="brand" aria-label="Shri Pathi G home">
-        <img src="assets/name.png" alt="Shri Pathi G logo" class="brand-logo" />
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <img src="assets/name.png" alt="Shri Pathi Logo" onerror="this.style.display='none'; document.getElementById('logoText').style.display='block';" />
+        <span id="logoText" class="hidden-fallback">Shri Pathi<span class="brand-dot">.</span></span>
       </a>
-      <div class="nav-right">
-        <nav class="site-nav" aria-label="Primary navigation">
-          <a href="index.html">Home</a>
-          <a href="skills.html">Skills</a>
-          <a href="projects.html">Projects</a>
-          <a href="experience.html">Experience</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-        <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
-      </div>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="skills.html" class="nav-link">Skills</a></li>
+          <li><a href="experience.html" class="nav-link active">Experience</a></li>
+          <li><a href="projects.html" class="nav-link">Projects</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">☰</button>
     </div>
   </header>
 
-  <main>
-    <section class="page-hero">
-      <div class="container reveal">
-        <span class="tag tag-gold">Trajectory</span>
-        <h1>Career experience & exposure</h1>
-        <p>A timeline of internships, professional workshops, academic certifications, and active leadership roles.</p>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container exp-layout">
-        <div>
-          <h2 class="reveal exp-heading">Industry Experience</h2>
-          <div class="timeline">
-            
-            <article class="timeline-item reveal delay-1">
-              <h3>Full Stack Developer Intern</h3>
-              <p class="date-label">Yectra Technologies Private Limited • Jan 2026 - Present</p>
-              <p>Worked on frontend UI development, API integration, responsive user interfaces, and end-to-end testing using Cypress.</p>
-            </article>
-
-            <article class="timeline-item reveal delay-2">
-              <h3>Machine Learning Intern</h3>
-              <p class="date-label">Acmegrade • Oct 2024 - Nov 2024</p>
-              <p>Gained foundational knowledge in Machine Learning, covering supervised and unsupervised learning, model training, evaluation, and real-world applications.</p>
-            </article>
-            
-            <article class="timeline-item reveal delay-3">
-              <h3>Cloud Computing Intern</h3>
-              <p class="date-label">Gateway Software Solutions • Jun 2024 - Jul 2024</p>
-              <p>Gained a basic Knowledge in the areas of Cloud Computing, including fundamentals, AWS Core Services, Big Data and Analytics.</p>
-            </article>
-            
-            <article class="timeline-item reveal delay-4">
-              <h3>Artificial Intelligence Intern</h3>
-              <p class="date-label">Elewayte • Feb 2024 - Mar 2024</p>
-              <p>Gained a basic Knowledge in the areas of Artificial Intelligence, including fundamentals, Machine Learning and Deep Learning.</p>
-            </article>
-            
-          </div>
+  <main style="padding-top: 6rem;">
+    <section class="experience-section">
+      <div class="container">
+        <div class="section-header-center">
+          <span class="section-tag">CAREER PATH</span>
+          <h2 class="section-heading">Professional Experience & Education</h2>
         </div>
 
-        <div class="stack-col">
-          <article class="card reveal delay-1">
-            <h3><span class="emoji-accent-blue">🎓</span> Education</h3>
-            <ul class="clean-list">
-              <li><strong>B.E. Computer Science and Engineering</strong><br>Dr.Mahalingam College of Engineering and Technology (2022 – 2026)</li>
-              <li><strong>Higher Secondary Certificate</strong><br>S.S.M.Lakshmi Ammal Matric Higher Secondary School (2021 – 2022)</li>
-            </ul>
-          </article>
+        <div class="experience-grid-layout">
+          <div>
+            <h3 class="section-heading-red">💼 Professional Internships</h3>
+            <div class="timeline-grid" id="experienceGrid">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
 
-          <article class="card reveal delay-2">
-            <h3><span class="emoji-accent-purple">🏅</span> Certifications</h3>
-            <ul class="clean-list">
-              <li>Oracle Certified Foundations Associate – HCM Cloud</li>
-              <li>Data Science and Analytics (HP Life)</li>
-              <li>Generative AI Workshop (Amypo Technologies)</li>
-            </ul>
-          </article>
+          <div>
+            <h3 class="section-heading-blue">🎓 Education</h3>
+            <div class="timeline-grid" id="educationGrid">
+              <!-- Dynamically populated -->
+            </div>
 
-          <article class="card reveal delay-3">
-            <h3><span class="emoji-accent-gold">🏆</span> Achievements & Events</h3>
-            <ul class="clean-list">
-              <li><strong>1st Place</strong> — AI Tech Expo (Innovative AI-based solution)</li>
-              <li>Virtual Experience — Data Analytics Job Simulation, Deloitte Australia (Jul 2025)</li>
-              <li>Conference Paper — 11th International Conference, Karpagam Institute of Technology (Apr 2025): IoT-Based Monitoring System for Temperature, Humidity & Ammonia in Perishable Storage</li>
-              <li>Paper Presentation — AI in Healthcare: Diagnosis and Drug Discovery (Sree Sakthi Engineering College, Mar 2024)</li>
-              <li>Paper Presentation — IoT-Based Smart Agriculture Systems (Karpagam College of Engineering, Mar 2025)</li>
-              <li>Project Presentation — Smart Shopping Trolley using AI: Revolutionizing Retail (Karpagam College of Engineering, Mar 2025)</li>
-            </ul>
-          </article>
+            <h3 class="section-heading-green">🏛️ Leadership & Campus Activities</h3>
+            <div class="timeline-card timeline-card-green">
+              <div class="timeline-header">
+                <div>
+                  <h3 class="timeline-role timeline-role-large">Hostel Welfare Committee Member</h3>
+                  <div class="timeline-company timeline-company-green">Dr. Mahalingam College of Engineering and Technology</div>
+                </div>
+                <span class="timeline-period">2023 – 2025</span>
+              </div>
+              <p class="timeline-desc">Coordinated student activities, addressed student concerns, and supported hostel administration.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container foot-wrap">
-      <p>© <span id="year"></span> Shri Pathi G</p>
-      <div class="foot-nav">
-        <a href="index.html">Home</a>
-        <a href="skills.html">Skills</a>
-        <a href="projects.html">Projects</a>
-        <a href="experience.html">Experience</a>
-        <a href="contact.html">Contact</a>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="brand-logo">
+          <img src="assets/name.png" alt="Shri Pathi Logo" class="footer-logo-img" />
+        </div>
+        <p class="footer-tagline">Building scalable, elegant digital solutions.</p>
+
+        <div class="footer-socials">
+          <a href="mailto:shrisekar3@gmail.com" class="social-circle" aria-label="Email">✉</a>
+          <a href="https://github.com/Shripathi-Gunasekaran" target="_blank" rel="noopener" class="social-circle" aria-label="GitHub">GH</a>
+          <a href="https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1" target="_blank" rel="noopener" class="social-circle" aria-label="LinkedIn">IN</a>
+        </div>
+
+        <div class="footer-copy">
+          © <span id="year">2026</span> Shri Pathi G. All rights reserved.
+        </div>
       </div>
     </div>
   </footer>
 
+  <!-- Scripts -->
+  <script src="data.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

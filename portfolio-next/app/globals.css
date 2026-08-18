@@ -30,10 +30,7 @@
 
 html {
   scroll-behavior: smooth;
-  -webkit-scrollbar-width: thin;
   scrollbar-width: thin;
-  -webkit-scrollbar-color: var(--accent) var(--bg-primary);
-  scrollbar-color: var(--accent) var(--bg-primary);
 }
 
 ::-webkit-scrollbar { width: 5px; }

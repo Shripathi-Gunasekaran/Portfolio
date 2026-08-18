@@ -58,10 +58,7 @@
 
 html {
   scroll-behavior: smooth;
-  -webkit-scrollbar-width: thin;
   scrollbar-width: thin;
-  -webkit-scrollbar-color: var(--accent-cyan) var(--bg-deep);
-  scrollbar-color: var(--accent-cyan) var(--bg-deep);
 }
 
 ::-webkit-scrollbar { width: 6px; }

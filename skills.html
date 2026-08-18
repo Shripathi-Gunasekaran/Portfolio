@@ -3,118 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Shri Pathi G technical skills" />
+  <meta name="description" content="Technical Skills - Shri Pathi G" />
   <title>Skills | Shri Pathi G</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/png" href="assets/name.png" />
 </head>
 <body>
-  <!-- Preloader -->
-  <div class="preloader">
-    <div class="loader-content">
-      <div class="hex-spinner"></div>
-      <div class="loader-text">SYSTEM.BOOT()</div>
+
+  <!-- Custom Animated Cursor Elements -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-circle" id="cursorCircle"></div>
+
+  <!-- VFX Preloader -->
+  <div id="preloader" class="vfx-preloader">
+    <canvas id="preloaderCanvas" class="preloader-canvas"></canvas>
+    <div class="preloader-bg-overlay"></div>
+
+    <div class="vfx-preloader-content">
+      <div class="hud-frame">
+        <div class="hud-corner hud-top-left"></div>
+        <div class="hud-corner hud-top-right"></div>
+        <div class="hud-corner hud-bottom-left"></div>
+        <div class="hud-corner hud-bottom-right"></div>
+
+        <div class="logo-vfx-wrap">
+          <img src="assets/name.png" alt="ShriPathiG Logo" class="vfx-logo-img" />
+          <div class="vfx-scanline"></div>
+        </div>
+      </div>
+
+      <div class="vfx-status-text">
+        <span class="vfx-tag">SYSTEM.INITIALIZING //</span>
+        <span id="vfxPercent" class="vfx-percent">0%</span>
+      </div>
+
+      <div class="vfx-progress-bar">
+        <div id="preloaderProgress" class="vfx-progress-fill">
+          <div class="vfx-spark-head"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- VFX Elements -->
-  <div class="cursor-glow"></div>
-  <div class="page-transition"></div>
-  
-  <div class="bg-mesh">
-    <div class="bg-orb bg-orb--1 bg-orb--1-skills"></div>
-    <div class="bg-orb bg-orb--2 bg-orb--2-skills"></div>
-  </div>
-
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <a href="index.html" class="brand" aria-label="Shri Pathi G home">
-        <img src="assets/name.png" alt="Shri Pathi G logo" class="brand-logo" />
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <img src="assets/name.png" alt="Shri Pathi Logo" onerror="this.style.display='none'; document.getElementById('logoText').style.display='block';" />
+        <span id="logoText" class="hidden-fallback">Shri Pathi<span class="brand-dot">.</span></span>
       </a>
-      <div class="nav-right">
-        <nav class="site-nav" aria-label="Primary navigation">
-          <a href="index.html">Home</a>
-          <a href="skills.html">Skills</a>
-          <a href="projects.html">Projects</a>
-          <a href="experience.html">Experience</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-        <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
-      </div>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="skills.html" class="nav-link active">Skills</a></li>
+          <li><a href="experience.html" class="nav-link">Experience</a></li>
+          <li><a href="projects.html" class="nav-link">Projects</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">☰</button>
     </div>
   </header>
 
-  <main>
-    <section class="page-hero">
-      <div class="container reveal">
-        <span class="tag tag-purple">Technical Arsenal</span>
-        <h1>Skill stack & toolbelt</h1>
-        <p>The core programming languages, frameworks, analytic tools, and cloud platforms I use to build scalable systems.</p>
-      </div>
-    </section>
+  <main style="padding-top: 6rem;">
+    <section class="features-section section-bg-dark">
+      <div class="container">
+        <div class="section-header-center">
+          <span class="section-tag">TECHNICAL SKILLS</span>
+          <h2 class="section-heading">Core Skills & Expertise</h2>
+        </div>
 
-    <section class="section">
-      <div class="container skills-grid">
-        <article class="skill-card reveal delay-1">
-          <h3><span class="skill-icon feature-icon--blue">🌐</span> Web Technologies</h3>
-          <p>Modern frontend frameworks and component-driven architecture.</p>
-          <div class="skill-tags">
-            <span class="skill-tag">TypeScript</span>
-            <span class="skill-tag">Next.JS</span>
-            <span class="skill-tag">React</span>
-          </div>
-          <div class="skill-progress"><div class="skill-progress-bar skill-bar-blue-cyan" data-width="90"></div></div>
-        </article>
-
-        <article class="skill-card reveal delay-2">
-          <h3><span class="skill-icon feature-icon--green">📊</span> Data Analytics</h3>
-          <p>Dashboarding, metrics visualization, and data modeling.</p>
-          <div class="skill-tags">
-            <span class="skill-tag">MS Excel</span>
-            <span class="skill-tag">Power BI</span>
-            <span class="skill-tag">Tableau</span>
-          </div>
-          <div class="skill-progress"><div class="skill-progress-bar skill-bar-green-cyan" data-width="95"></div></div>
-        </article>
-
-        <article class="skill-card reveal delay-3">
-          <h3><span class="skill-icon feature-icon--purple">🧠</span> Data & AI Tools</h3>
-          <p>Deploying AI models, workflows, and automated pipeline tooling.</p>
-          <div class="skill-tags">
-            <span class="skill-tag">Generative AI</span>
-            <span class="skill-tag">N8N</span>
-            <span class="skill-tag">Flowise</span>
-            <span class="skill-tag">Groq Cloud</span>
-          </div>
-          <div class="skill-progress"><div class="skill-progress-bar skill-bar-purple-pink" data-width="85"></div></div>
-        </article>
-
-        <article class="skill-card reveal delay-1">
-          <h3><span class="skill-icon feature-icon--cyan">⚙️</span> Automation Testing</h3>
-          <p>Quality assurance via end-to-end and automated UI testing frameworks.</p>
-          <div class="skill-tags">
-            <span class="skill-tag">Cypress</span>
-            <span class="skill-tag">Selenium</span>
-          </div>
-          <div class="skill-progress"><div class="skill-progress-bar skill-bar-cyan-blue" data-width="80"></div></div>
-        </article>
+        <div id="categorizedSkillsGrid" class="skill-grid-layout">
+          <!-- Dynamically populated from script.js & data.js -->
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container foot-wrap">
-      <p>© <span id="year"></span> Shri Pathi G</p>
-      <div class="foot-nav">
-        <a href="index.html">Home</a>
-        <a href="skills.html">Skills</a>
-        <a href="projects.html">Projects</a>
-        <a href="experience.html">Experience</a>
-        <a href="contact.html">Contact</a>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="brand-logo">
+          <img src="assets/name.png" alt="Shri Pathi Logo" class="footer-logo-img" />
+        </div>
+        <p class="footer-tagline">Building scalable, elegant digital solutions.</p>
+
+        <div class="footer-socials">
+          <a href="mailto:shrisekar3@gmail.com" class="social-circle" aria-label="Email">✉</a>
+          <a href="https://github.com/Shripathi-Gunasekaran" target="_blank" rel="noopener" class="social-circle" aria-label="GitHub">GH</a>
+          <a href="https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1" target="_blank" rel="noopener" class="social-circle" aria-label="LinkedIn">IN</a>
+        </div>
+
+        <div class="footer-copy">
+          © <span id="year">2026</span> Shri Pathi G. All rights reserved.
+        </div>
       </div>
     </div>
   </footer>
 
+  <!-- Scripts -->
+  <script src="data.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
