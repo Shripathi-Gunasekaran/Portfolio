@@ -378,6 +378,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const status = contactForm.querySelector('#formStatus, .form-status') || document.getElementById('formStatus');
       const nameInput = contactForm.querySelector('#name, [name="name"]');
       const emailInput = contactForm.querySelector('#email, [name="email"]');
+      const phoneInput = contactForm.querySelector('#phone, [name="phone"]');
+      const serviceInput = contactForm.querySelector('#service, [name="service"]');
       const subjectInput = contactForm.querySelector('#subject, [name="subject"]');
       const messageInput = contactForm.querySelector('#message, [name="message"]');
 
@@ -386,7 +388,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const payload = {
         name: nameInput.value.trim(),
         email: emailInput.value.trim(),
-        subject: subjectInput ? subjectInput.value.trim() : 'Portfolio contact',
+        phone: phoneInput ? phoneInput.value.trim() : '',
+        service: serviceInput ? serviceInput.value.trim() : '',
+        subject: serviceInput && serviceInput.value ? `Service Requested: ${serviceInput.value}` : (subjectInput ? subjectInput.value.trim() : 'Portfolio Contact Message'),
         message: messageInput.value.trim()
       };
 
@@ -405,6 +409,9 @@ document.addEventListener('DOMContentLoaded', () => {
         status.textContent = 'Sending your message...';
       }
 
+      let sentSuccessfully = false;
+
+      // 1. Try local Node backend API
       try {
         const response = await fetch('/api/contact', {
           method: 'POST',
@@ -412,28 +419,62 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify(payload)
         });
 
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
-          throw new Error(result.message || 'Unable to send message.');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            sentSuccessfully = true;
+          }
         }
+      } catch (err) {
+        console.log('Backend API request skipped or offline');
+      }
+
+      // 2. Direct real email delivery via Web3Forms API to shrisekar3@gmail.com
+      try {
+        const w3Res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: 'ee50058b-0e40-4b35-8ea5-d912e56e0771', // Instant delivery key to shrisekar3@gmail.com
+            name: payload.name,
+            email: payload.email,
+            phone: payload.phone || 'Not provided',
+            service: payload.service || 'General Inquiry',
+            subject: `🚀 Portfolio Message from ${payload.name} (${payload.service || 'General'})`,
+            message: `FULL NAME: ${payload.name}\nEMAIL: ${payload.email}\nWHATSAPP NUMBER: ${payload.phone || 'N/A'}\nSERVICE NEEDED: ${payload.service || 'N/A'}\n\nYOUR MESSAGE:\n${payload.message}`
+          })
+        });
+
+        const w3Data = await w3Res.json();
+        if (w3Res.ok && w3Data.success) {
+          sentSuccessfully = true;
+        }
+      } catch (err) {
+        console.log('Web3Forms email delivery attempt finished');
+      }
+
+      if (sentSuccessfully) {
+        if (status) {
+          status.style.color = '#4ade80';
+          status.textContent = '🚀 Thank you! Your message has been sent directly to Shri Pathi.';
+        }
+        contactForm.reset();
+      } else {
+        // Fallback: Mailto link if all APIs fail
+        const mailtoUrl = `mailto:shrisekar3@gmail.com?subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(`Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone}\nService: ${payload.service}\n\nMessage:\n${payload.message}`)}`;
+        window.location.href = mailtoUrl;
 
         if (status) {
           status.style.color = '#4ade80';
-          status.textContent = result.message || 'Thank you! Your message has been sent successfully.';
+          status.textContent = 'Opening your mail application to complete delivery...';
         }
         contactForm.reset();
-      } catch (error) {
-        if (status) {
-          status.style.color = '#f87171';
-          status.textContent = error.message || 'Something went wrong. Please try again.';
-        }
       }
 
       if (status) {
         setTimeout(() => {
           status.style.display = 'none';
-        }, 6000);
+        }, 7000);
       }
     });
   });

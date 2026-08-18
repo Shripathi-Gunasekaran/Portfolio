@@ -106,11 +106,29 @@ function writeMessages(messages) {
   fs.writeFileSync(MESSAGE_FILE, JSON.stringify(messages, null, 2), 'utf8');
 }
 
+function loadEnv() {
+  const envPath = path.join(__dirname, '.env');
+  if (fs.existsSync(envPath)) {
+    const content = fs.readFileSync(envPath, 'utf8');
+    content.split(/\r?\n/).forEach(line => {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
+        const [key, ...valParts] = trimmed.split('=');
+        const val = valParts.join('=').trim().replace(/^["']|["']$/g, '');
+        if (key && !process.env[key.trim()]) {
+          process.env[key.trim()] = val;
+        }
+      }
+    });
+  }
+}
+loadEnv();
+
 async function sendContactEmail(payload) {
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  const toAddress = process.env.EMAIL_TO || user;
+  const toAddress = process.env.EMAIL_TO || user || 'shrisekar3@gmail.com';
 
   if (!nodemailer || !host || !user || !pass || !toAddress) {
     return { status: 'saved-only' };
@@ -119,7 +137,7 @@ async function sendContactEmail(payload) {
   const transporter = nodemailer.createTransport({
     host,
     port: Number(process.env.SMTP_PORT || 587),
-    secure: false,
+    secure: Number(process.env.SMTP_PORT) === 465,
     auth: {
       user,
       pass
@@ -130,8 +148,8 @@ async function sendContactEmail(payload) {
     from: user,
     to: toAddress,
     replyTo: payload.email,
-    subject: payload.subject || 'Portfolio contact message',
-    text: `Name: ${payload.name}\nEmail: ${payload.email}\n\nMessage:\n${payload.message}`
+    subject: `🚀 Portfolio Message: ${payload.service || payload.subject || 'New Contact Request'} from ${payload.name}`,
+    text: `FULL NAME: ${payload.name}\nEMAIL ADDRESS: ${payload.email}\nWHATSAPP NUMBER: ${payload.phone || 'N/A'}\nSERVICE NEEDED: ${payload.service || 'N/A'}\n\nYOUR MESSAGE:\n${payload.message}`
   });
 
   return { status: 'email-sent' };
@@ -173,6 +191,8 @@ function createAppServer() {
         const payload = await parseBody(req);
         const name = String(payload.name || '').trim();
         const email = String(payload.email || '').trim();
+        const phone = String(payload.phone || '').trim();
+        const service = String(payload.service || '').trim();
         const subject = String(payload.subject || '').trim();
         const message = String(payload.message || '').trim();
 
@@ -190,7 +210,9 @@ function createAppServer() {
           id: crypto.randomUUID(),
           name,
           email,
-          subject: subject || 'Portfolio contact message',
+          phone,
+          service,
+          subject: subject || (service ? `Service Request: ${service}` : 'Portfolio contact message'),
           message,
           createdAt: new Date().toISOString()
         };

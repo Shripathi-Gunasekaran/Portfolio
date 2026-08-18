@@ -72,7 +72,10 @@
         </ul>
       </nav>
 
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">☰</button>
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <button type="button" class="btn-book-interview openInterviewBtn"><span>✨</span> Schedule Interview</button>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">☰</button>
+      </div>
     </div>
   </header>
 
@@ -291,22 +294,43 @@
           </div>
 
           <form class="contact-form" id="contactForm">
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" class="form-control" placeholder="Your Name" required />
+            <div class="form-grid-2col">
+              <div class="form-group">
+                <label for="name">FULL NAME</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required />
+              </div>
+
+              <div class="form-group">
+                <label for="email">EMAIL ADDRESS</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="john@example.com" required />
+              </div>
+            </div>
+
+            <div class="form-grid-2col">
+              <div class="form-group">
+                <label for="phone">WHATSAPP NUMBER</label>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="+91 9876543210" />
+              </div>
+
+              <div class="form-group">
+                <label for="service">SERVICE NEEDED</label>
+                <select id="service" name="service" class="form-control form-select">
+                  <option value="" disabled selected>Select a service</option>
+                  <option value="Full-Stack Development">Full-Stack Development</option>
+                  <option value="QA Engineering & Automation Testing">QA Engineering & Automation Testing</option>
+                  <option value="Data Analytics & Power BI">Data Analytics & Power BI</option>
+                  <option value="IoT & Cloud Engineering">IoT & Cloud Engineering</option>
+                  <option value="Other / General Inquiry">Other / General Inquiry</option>
+                </select>
+              </div>
             </div>
 
             <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" class="form-control" placeholder="Your Email Address" required />
+              <label for="message">YOUR MESSAGE</label>
+              <textarea id="message" name="message" class="form-control" placeholder="Tell me about your project..." required></textarea>
             </div>
 
-            <div class="form-group">
-              <label for="message">Message</label>
-              <textarea id="message" class="form-control" placeholder="Tell me about your project..." required></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Send Message →</button>
+            <button type="submit" class="btn btn-send-message">🚀 Send Message</button>
             <div id="formStatus" class="form-status-hidden"></div>
           </form>
         </div>
@@ -335,6 +359,105 @@
       </div>
     </div>
   </footer>
+
+  <!-- Interview Appointment Modal Backdrop -->
+  <div id="interviewModal" class="interview-modal-backdrop">
+    <div class="interview-modal-container">
+      <button type="button" class="modal-close-btn closeInterviewBtn" aria-label="Close Modal">✕</button>
+
+      <span class="modal-tag">✦ INTERVIEW APPOINTMENT</span>
+      <h2 class="modal-title">Schedule an Interview</h2>
+      <p class="modal-subtitle">Pick your date, time, company & role — it will be emailed to Shri Pathi G and added to Google Calendar.</p>
+
+      <form id="interviewForm">
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label for="interviewName">YOUR NAME *</label>
+            <input type="text" id="interviewName" name="interviewName" class="form-control" placeholder="John Doe" required />
+          </div>
+
+          <div class="form-group">
+            <label for="interviewEmail">YOUR EMAIL *</label>
+            <input type="email" id="interviewEmail" name="interviewEmail" class="form-control" placeholder="john@example.com" required />
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label for="interviewCompany">COMPANY *</label>
+            <input type="text" id="interviewCompany" name="interviewCompany" class="form-control" placeholder="Acme Corp" required />
+          </div>
+
+          <div class="form-group">
+            <label for="interviewRole">ROLE *</label>
+            <select id="interviewRole" name="interviewRole" class="form-control form-select" required>
+              <option value="" disabled selected>Select a role</option>
+              <option value="Software Engineer">Software Engineer</option>
+              <option value="Full Stack Developer">Full Stack Developer</option>
+              <option value="QA / Automation Test Engineer">QA / Automation Test Engineer</option>
+              <option value="Data Analyst / Power BI Engineer">Data Analyst / Power BI Engineer</option>
+              <option value="IoT / Embedded Engineer">IoT / Embedded Engineer</option>
+              <option value="Other Role">Other Role</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label for="interviewDate">DATE *</label>
+            <input type="date" id="interviewDate" name="interviewDate" class="form-control" required />
+          </div>
+
+          <div class="form-group">
+            <label for="interviewTime">TIME *</label>
+            <input type="time" id="interviewTime" name="interviewTime" class="form-control" required />
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label for="interviewDuration">DURATION</label>
+            <select id="interviewDuration" name="interviewDuration" class="form-control form-select">
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+              <option value="45">45 minutes</option>
+              <option value="60" selected>60 minutes</option>
+              <option value="90">90 minutes</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="interviewMode">INTERVIEW MODE</label>
+            <select id="interviewMode" name="interviewMode" class="form-control form-select">
+              <option value="Google Meet" selected>Google Meet</option>
+              <option value="Zoom">Zoom</option>
+              <option value="Microsoft Teams">Microsoft Teams</option>
+              <option value="Phone Call">Phone Call</option>
+              <option value="In Person">In Person</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="interviewMeetingLink">MEETING LINK *</label>
+          <input type="url" id="interviewMeetingLink" name="interviewMeetingLink" class="form-control" placeholder="https://meet.google.com/..." required />
+        </div>
+
+        <div class="form-group">
+          <label for="interviewNotes">NOTES</label>
+          <textarea id="interviewNotes" name="interviewNotes" class="form-control" placeholder="Any specific topics, agenda, or instructions..." style="min-height: 90px;"></textarea>
+        </div>
+
+        <div class="modal-actions-wrap">
+          <button type="submit" class="btn-confirm-interview">Confirm Interview ✦</button>
+          <button type="button" class="btn-cancel-modal cancelInterviewBtn">Cancel</button>
+        </div>
+
+        <p class="modal-subtext">Booking opens Google Calendar — add it to your calendar to confirm the slot.</p>
+        <div id="interviewStatus" class="form-status-hidden" style="margin-top: 1rem; text-align: center; font-weight: 600;"></div>
+      </form>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="data.js"></script>
