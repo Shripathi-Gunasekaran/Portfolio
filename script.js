@@ -591,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form       = document.getElementById('interviewForm');
     const statusBox  = document.getElementById('imStatus');
     const submitBtn  = document.getElementById('imSubmitBtn');
-    const openBtn    = document.getElementById('openInterviewModal');
+    const openBtns   = document.querySelectorAll('[data-open-interview], #openInterviewModal, .openInterviewBtn');
     const closeBtn   = document.getElementById('closeInterviewModal');
     const cancelBtn  = document.getElementById('cancelInterviewModal');
     const dateInput  = document.getElementById('imDate');
@@ -604,20 +604,27 @@ document.addEventListener('DOMContentLoaded', () => {
       dateInput.min = today.toISOString().split('T')[0];
     }
 
+    let previousBodyOverflow = '';
+
     function openModal() {
       backdrop.style.display = 'flex';
       // Force reflow so transition triggers
       backdrop.offsetHeight;
       backdrop.classList.add('im-open');
       backdrop.setAttribute('aria-hidden', 'false');
+      previousBodyOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
+      backdrop.scrollTop = 0;
+      const modalCard = backdrop.querySelector('.im-card');
+      if (modalCard) modalCard.scrollTop = 0;
       hideStatus();
+      closeBtn?.focus();
     }
 
     function closeModal() {
       backdrop.classList.remove('im-open');
       backdrop.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
+      document.body.style.overflow = previousBodyOverflow;
       setTimeout(() => { backdrop.style.display = 'none'; }, 340);
     }
 
@@ -655,6 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Send email notification to portfolio owner
     async function sendEmailNotification(data) {
+      // Local server delivery (works when the portfolio is run with `npm run dev`).
       try {
         const res = await fetch('/api/interview', {
           method: 'POST',
@@ -662,9 +670,46 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify(data)
         });
         const json = await res.json();
-        return json.delivery === 'email-sent';
+        if (json.delivery === 'email-sent') return true;
       } catch (e) {
-        console.warn('Email notification failed (non-critical):', e.message);
+        console.warn('Local interview email endpoint is unavailable:', e.message);
+      }
+
+      // Static hosts such as Netlify do not run server.js. Web3Forms sends the
+      // appointment to the email account associated with this access key.
+      try {
+        const message = [
+          'NEW INTERVIEW APPOINTMENT',
+          '',
+          `Name: ${data.name}`,
+          `Email: ${data.email}`,
+          `Company: ${data.company}`,
+          `Role: ${data.role}`,
+          `Date: ${data.date}`,
+          `Time: ${data.time}`,
+          `Duration: ${data.duration} minutes`,
+          `Interview mode: ${data.mode}`,
+          `Meeting link: ${data.meetingLink || 'Not provided'}`,
+          '',
+          `Notes: ${data.notes || 'None'}`
+        ].join('\n');
+
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: 'ee50058b-0e40-4b35-8ea5-d912e56e0771',
+            name: data.name,
+            email: data.email,
+            replyto: data.email,
+            subject: `Interview Request: ${data.role} at ${data.company}`,
+            message
+          })
+        });
+        const result = await response.json();
+        return response.ok && result.success === true;
+      } catch (e) {
+        console.warn('Web3Forms interview email failed:', e.message);
         return false;
       }
     }
@@ -706,7 +751,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (emailSent) {
         showStatus('✅ Done! Calendar opened and email sent to Shri Pathi G.', 'success');
       } else {
-        showStatus('✅ Calendar opened! (Email will be sent once server is configured.)', 'success');
+        showStatus('⚠ Calendar opened, but the email could not be delivered. Please try again.', 'error');
       }
 
       submitBtn.disabled = false;
@@ -721,7 +766,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Wire buttons
-    if (openBtn)   openBtn.addEventListener('click', openModal);
+    openBtns.forEach((button) => button.addEventListener('click', openModal));
     if (closeBtn)  closeBtn.addEventListener('click', closeModal);
     if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
 
