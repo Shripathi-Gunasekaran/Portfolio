@@ -8,7 +8,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "nodemailer": "^6.9.16",
+    "nodemailer": "^6.10.1",
     "pdf-parse": "^2.4.5"
   }
 }
