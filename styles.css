@@ -446,6 +446,145 @@ button {
   padding: 9rem 0 4rem;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
+  background: #0e1014;
+}
+
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero::before {
+  z-index: -2;
+  opacity: 0.42;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.38) 72%, transparent 100%);
+}
+
+.hero::after {
+  z-index: -1;
+  background:
+    radial-gradient(circle at 75% 36%, rgba(232, 57, 74, 0.2), transparent 24%),
+    radial-gradient(circle at 14% 80%, rgba(232, 57, 74, 0.11), transparent 22%);
+  filter: blur(14px);
+  animation: heroAmbient 10s ease-in-out infinite alternate;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero-loader {
+  position: absolute;
+  top: 15%;
+  right: 8%;
+  width: 270px;
+  height: 270px;
+  opacity: 0.42;
+  display: grid;
+  place-items: center;
+}
+
+.hero-loader-ring {
+  position: absolute;
+  border: 1px solid rgba(232, 57, 74, 0.42);
+  border-radius: 50%;
+}
+
+.hero-loader-ring--outer {
+  inset: 0;
+  border-style: dashed;
+  animation: loaderSpin 18s linear infinite;
+}
+
+.hero-loader-ring--inner {
+  inset: 30px;
+  border-color: rgba(255, 255, 255, 0.16);
+  border-top-color: var(--accent-red);
+  border-bottom-color: var(--accent-red);
+  animation: loaderSpinReverse 9s linear infinite;
+}
+
+.hero-loader-core {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent-red);
+  box-shadow: 0 0 12px var(--accent-red), 0 0 34px rgba(232, 57, 74, 0.7);
+  animation: loaderPulse 1.8s ease-in-out infinite;
+}
+
+.hero-loader-label {
+  position: absolute;
+  bottom: 38px;
+  color: rgba(255, 255, 255, 0.52);
+  font: 700 0.58rem var(--font-mono);
+  letter-spacing: 1.4px;
+}
+
+.hero-loader-label b { color: var(--accent-red); }
+.hero-loader-label strong { color: rgba(255, 255, 255, 0.85); }
+
+.hero-loader-line {
+  position: absolute;
+  left: 38px;
+  right: 38px;
+  bottom: 25px;
+  height: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hero-loader-line::after {
+  content: '';
+  display: block;
+  width: 87%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent-red), #ff8992);
+  box-shadow: 0 0 8px var(--accent-red);
+  animation: loaderProgress 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes loaderSpin { to { transform: rotate(360deg); } }
+@keyframes loaderSpinReverse { to { transform: rotate(-360deg); } }
+@keyframes loaderPulse { 50% { transform: scale(1.8); opacity: 0.5; } }
+@keyframes loaderProgress { from { transform: translateX(-70%); } to { transform: translateX(8%); } }
+
+.hero-particle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-red);
+  box-shadow: 0 0 10px var(--accent-red), 0 0 22px rgba(232, 57, 74, 0.58);
+  opacity: 0.28;
+  animation: heroParticle 8s ease-in-out infinite;
+}
+
+.hero-particle--1 { top: 22%; left: 11%; animation-delay: -1s; }
+.hero-particle--2 { top: 68%; left: 27%; width: 3px; height: 3px; animation-delay: -4s; }
+.hero-particle--3 { top: 19%; right: 21%; width: 4px; height: 4px; animation-delay: -6s; }
+.hero-particle--4 { top: 78%; right: 13%; animation-delay: -2s; }
+.hero-particle--5 { top: 48%; right: 44%; width: 3px; height: 3px; animation-delay: -5s; }
+
+@keyframes heroAmbient {
+  from { transform: scale(0.96) translate3d(-1.5%, 0, 0); opacity: 0.64; }
+  to { transform: scale(1.08) translate3d(2%, -1%, 0); opacity: 1; }
+}
+
+@keyframes heroParticle {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(0.8); opacity: 0.12; }
+  50% { transform: translate3d(24px, -42px, 0) scale(1.2); opacity: 0.7; }
 }
 
 .hero-grid {
@@ -455,6 +594,8 @@ button {
   gap: 3rem;
   max-width: 1040px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-subtag {
@@ -595,6 +736,8 @@ button {
   padding: 1.25rem 0;
   margin-top: 3.5rem;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 .ticker-track {
@@ -2094,8 +2237,24 @@ textarea.form-control {
   .about-image-container,
   .vfx-logo-img,
   .vfx-scanline,
-  .ticker-track {
+  .ticker-track,
+  .hero::after,
+  .hero-particle,
+  .hero-loader-ring--outer,
+  .hero-loader-ring--inner,
+  .hero-loader-core,
+  .hero-loader-line::after {
     animation: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-loader {
+    top: 11%;
+    right: -9%;
+    width: 210px;
+    height: 210px;
+    opacity: 0.25;
   }
 }
 

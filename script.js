@@ -390,7 +390,9 @@ document.addEventListener('DOMContentLoaded', () => {
         email: emailInput.value.trim(),
         phone: phoneInput ? phoneInput.value.trim() : '',
         service: serviceInput ? serviceInput.value.trim() : '',
-        subject: serviceInput && serviceInput.value ? `Service Requested: ${serviceInput.value}` : (subjectInput ? subjectInput.value.trim() : 'Portfolio Contact Message'),
+        subject: serviceInput && serviceInput.value
+          ? `Project Enquiry for Shri Pathi G — ${serviceInput.value}`
+          : (subjectInput ? subjectInput.value.trim() : 'Project Enquiry for Shri Pathi G'),
         message: messageInput.value.trim()
       };
 
@@ -440,8 +442,17 @@ document.addEventListener('DOMContentLoaded', () => {
             email: payload.email,
             phone: payload.phone || 'Not provided',
             service: payload.service || 'General Inquiry',
-            subject: `🚀 Portfolio Message from ${payload.name} (${payload.service || 'General'})`,
-            message: `FULL NAME: ${payload.name}\nEMAIL: ${payload.email}\nWHATSAPP NUMBER: ${payload.phone || 'N/A'}\nSERVICE NEEDED: ${payload.service || 'N/A'}\n\nYOUR MESSAGE:\n${payload.message}`
+            subject: `Project Enquiry for Shri Pathi G — ${payload.service || 'General Collaboration'}`,
+            message: [
+              'Hello Shri Pathi,', '',
+              `${payload.name} has submitted a new project enquiry through your portfolio.`, '',
+              'CONTACT DETAILS', `Name: ${payload.name}`, `Email: ${payload.email}`,
+              `WhatsApp: ${payload.phone || 'Not provided'}`,
+              `Service requested: ${payload.service || 'General enquiry'}`, '',
+              'MESSAGE', payload.message, '',
+              'Please reply directly to this email to continue the conversation.', '',
+              '— Shri Pathi G Portfolio Contact System'
+            ].join('\n')
           })
         });
 
@@ -595,13 +606,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn   = document.getElementById('closeInterviewModal');
     const cancelBtn  = document.getElementById('cancelInterviewModal');
     const dateInput  = document.getElementById('imDate');
+    const modeInput  = document.getElementById('imMode');
+    const linkInput  = document.getElementById('imLink');
+    const linkLabel  = document.querySelector('label[for="imLink"]');
+    const linkField  = linkInput?.closest('.im-field');
 
     if (!backdrop || !form) return;
 
     // Set min date to today
     if (dateInput) {
       const today = new Date();
-      dateInput.min = today.toISOString().split('T')[0];
+      // Interviews must be booked for a future calendar day.
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const pad = (value) => String(value).padStart(2, '0');
+      dateInput.min = `${tomorrow.getFullYear()}-${pad(tomorrow.getMonth() + 1)}-${pad(tomorrow.getDate())}`;
     }
 
     let previousBodyOverflow = '';
@@ -639,6 +658,46 @@ document.addEventListener('DOMContentLoaded', () => {
       if (statusBox) { statusBox.style.display = 'none'; statusBox.textContent = ''; }
     }
 
+    function syncMeetingLinkRequirement() {
+      const mode = modeInput?.value || 'Google Meet';
+      const online = ['Google Meet', 'Zoom', 'Microsoft Teams'].includes(mode);
+      const inPerson = mode === 'In Person';
+      const visible = online || inPerson;
+      const required = online || inPerson;
+      if (linkField) {
+        linkField.hidden = !visible;
+        linkField.style.display = visible ? '' : 'none';
+      }
+      if (linkInput) {
+        linkInput.required = required;
+        linkInput.type = online ? 'url' : 'text';
+        linkInput.placeholder = online ? 'https://meet.google.com/xxx-xxxx-xxx' : 'Enter the interview venue';
+        if (!visible) linkInput.value = '';
+      }
+      if (linkLabel) linkLabel.innerHTML = `${online ? 'MEETING LINK' : 'VENUE'} <span class="im-req">*</span>`;
+    }
+    modeInput?.addEventListener('change', syncMeetingLinkRequirement);
+    syncMeetingLinkRequirement();
+
+    function meetingLinkError(data) {
+      const onlineModes = ['Google Meet', 'Zoom', 'Microsoft Teams'];
+      if (data.mode === 'Phone Call') return '';
+      if (data.mode === 'In Person' && !data.meetingLink) return 'In-person interviews require a venue.';
+      if (!onlineModes.includes(data.mode)) return '';
+      if (onlineModes.includes(data.mode) && !data.meetingLink) {
+        return `${data.mode} interviews require a meeting link.`;
+      }
+      try {
+        const url = new URL(data.meetingLink);
+        if (!['http:', 'https:'].includes(url.protocol) || !url.hostname.includes('.')) {
+          return 'Enter a complete meeting link beginning with https://.';
+        }
+      } catch (_) {
+        return 'Enter a valid meeting link beginning with https://.';
+      }
+      return '';
+    }
+
     // Build Google Calendar URL
     function buildCalendarUrl(data) {
       const dur      = parseInt(data.duration, 10) || 60;
@@ -653,11 +712,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const title   = encodeURIComponent(`Interview with Shri Pathi G — ${data.role} @ ${data.company}`);
       const details = encodeURIComponent(
-        `Interviewer: Shri Pathi G\nMode: ${data.mode}\n${data.meetingLink ? 'Link: ' + data.meetingLink : ''}\n${data.notes ? '\nNotes: ' + data.notes : ''}`
+        `Interviewer: Shri Pathi G\nMode: ${data.mode}\n${data.meetingLink ? (data.mode === 'In Person' ? 'Venue: ' : 'Meeting link: ') + data.meetingLink : ''}\n${data.notes ? '\nNotes: ' + data.notes : ''}`
       );
       const loc = encodeURIComponent(data.meetingLink || data.mode || '');
 
-      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${loc}`;
+      // Add Shri Pathi as a Calendar attendee so Google sends an invitation
+      // when the employer saves the event.
+      const attendee = encodeURIComponent('shrisekar3@gmail.com');
+      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${loc}&add=${attendee}`;
     }
 
     // Send email notification to portfolio owner
@@ -679,8 +741,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // appointment to the email account associated with this access key.
       try {
         const message = [
-          'NEW INTERVIEW APPOINTMENT',
+          'SCHEDULED INTERVIEW FOR SHRI PATHI G',
           '',
+          `Hello Shri Pathi, ${data.name} from ${data.company} has requested an interview.`, '',
+          'APPOINTMENT DETAILS',
           `Name: ${data.name}`,
           `Email: ${data.email}`,
           `Company: ${data.company}`,
@@ -689,9 +753,11 @@ document.addEventListener('DOMContentLoaded', () => {
           `Time: ${data.time}`,
           `Duration: ${data.duration} minutes`,
           `Interview mode: ${data.mode}`,
-          `Meeting link: ${data.meetingLink || 'Not provided'}`,
+          `${data.mode === 'In Person' ? 'Venue' : 'Meeting link'}: ${data.meetingLink || 'Not provided'}`,
           '',
-          `Notes: ${data.notes || 'None'}`
+          `Notes: ${data.notes || 'None'}`, '',
+          'Please review the details and reply directly to the employer if any changes are needed.', '',
+          '— Shri Pathi G Interview Scheduling System'
         ].join('\n');
 
         const response = await fetch('https://api.web3forms.com/submit', {
@@ -702,7 +768,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: data.name,
             email: data.email,
             replyto: data.email,
-            subject: `Interview Request: ${data.role} at ${data.company}`,
+            subject: `Scheduled Interview for Shri Pathi G — ${data.role} at ${data.company}`,
             message
           })
         });
@@ -734,6 +800,19 @@ document.addEventListener('DOMContentLoaded', () => {
       // Validate required
       if (!data.name || !data.email || !data.company || !data.role || !data.date || !data.time) {
         showStatus('⚠ Please fill in all required fields.', 'error');
+        return;
+      }
+
+      const appointmentTime = new Date(`${data.date}T${data.time}:00`);
+      if (Number.isNaN(appointmentTime.getTime()) || appointmentTime <= new Date()) {
+        showStatus('⚠ Choose a future date and time for the interview.', 'error');
+        return;
+      }
+
+      const linkError = meetingLinkError(data);
+      if (linkError) {
+        showStatus(`⚠ ${linkError}`, 'error');
+        document.getElementById('imLink')?.focus();
         return;
       }
 

@@ -148,8 +148,8 @@ async function sendContactEmail(payload) {
     from: user,
     to: toAddress,
     replyTo: payload.email,
-    subject: `🚀 Portfolio Message: ${payload.service || payload.subject || 'New Contact Request'} from ${payload.name}`,
-    text: `FULL NAME: ${payload.name}\nEMAIL ADDRESS: ${payload.email}\nWHATSAPP NUMBER: ${payload.phone || 'N/A'}\nSERVICE NEEDED: ${payload.service || 'N/A'}\n\nYOUR MESSAGE:\n${payload.message}`
+    subject: `Project Enquiry for Shri Pathi G — ${payload.service || payload.subject || 'General Collaboration'}`,
+    text: `Hello Shri Pathi,\n\n${payload.name} has submitted a new project enquiry through your portfolio.\n\nCONTACT DETAILS\nName: ${payload.name}\nEmail: ${payload.email}\nWhatsApp: ${payload.phone || 'Not provided'}\nService requested: ${payload.service || 'General enquiry'}\n\nMESSAGE\n${payload.message}\n\nPlease reply directly to this email to continue the conversation.\n\n— Shri Pathi G Portfolio Contact System`
   });
 
   return { status: 'email-sent' };
@@ -255,10 +255,37 @@ function createAppServer() {
         const role    = String(d.role    || '').trim();
         const date    = String(d.date    || '').trim();
         const time    = String(d.time    || '').trim();
+        const mode    = String(d.mode    || 'Google Meet').trim();
+        const meetingLink = String(d.meetingLink || '').trim();
 
         if (!name || !email || !company || !role || !date || !time) {
           sendJson(res, 400, { success: false, message: 'Required fields missing.' });
           return;
+        }
+
+        const appointmentTime = new Date(`${date}T${time}:00`);
+        if (Number.isNaN(appointmentTime.getTime()) || appointmentTime <= new Date()) {
+          sendJson(res, 400, { success: false, message: 'Interview date and time must be in the future.' });
+          return;
+        }
+
+        const onlineModes = ['Google Meet', 'Zoom', 'Microsoft Teams'];
+        if (onlineModes.includes(mode) && !meetingLink) {
+          sendJson(res, 400, { success: false, message: `${mode} interviews require a meeting link.` });
+          return;
+        }
+        if (mode === 'In Person' && !meetingLink) {
+          sendJson(res, 400, { success: false, message: 'In-person interviews require a venue.' });
+          return;
+        }
+        if (meetingLink && onlineModes.includes(mode)) {
+          try {
+            const link = new URL(meetingLink);
+            if (!['http:', 'https:'].includes(link.protocol) || !link.hostname.includes('.')) throw new Error('invalid');
+          } catch (_) {
+            sendJson(res, 400, { success: false, message: 'Meeting link must be a complete http or https URL.' });
+            return;
+          }
         }
 
         // Save to interviews.json
@@ -304,8 +331,8 @@ function createAppServer() {
 <body>
 <div class="wrap">
   <div class="header">
-    <h1>📅 New Interview Appointment</h1>
-    <p>Someone wants to schedule an interview with you</p>
+    <h1>📅 Scheduled Interview for Shri Pathi G</h1>
+    <p>${name} from ${company} has requested an interview</p>
   </div>
   <div class="body">
     <div class="row"><div class="label">Name</div><div class="value">${name}</div></div>
@@ -316,7 +343,7 @@ function createAppServer() {
     <div class="row"><div class="label">Time</div><div class="value">${time}</div></div>
     <div class="row"><div class="label">Duration</div><div class="value">${d.duration || 60} minutes</div></div>
     <div class="row"><div class="label">Mode</div><div class="value">${d.mode || 'Google Meet'}</div></div>
-    ${d.meetingLink ? `<div class="row"><div class="label">Meeting Link</div><div class="value"><a href="${d.meetingLink}" style="color:#e8394a">${d.meetingLink}</a></div></div>` : ''}
+    ${d.meetingLink ? `<div class="row"><div class="label">${d.mode === 'In Person' ? 'Venue' : 'Meeting Link'}</div><div class="value">${d.mode === 'In Person' ? d.meetingLink : `<a href="${d.meetingLink}" style="color:#e8394a">${d.meetingLink}</a>`}</div></div>` : ''}
     ${d.notes ? `<div class="row"><div class="label">Notes</div><div class="value">${d.notes}</div></div>` : ''}
   </div>
   <div class="footer">Portfolio Interview System &nbsp;•&nbsp; Shri Pathi G</div>
@@ -328,9 +355,9 @@ function createAppServer() {
               from: `"Portfolio Interview" <${smtpUser}>`,
               to: emailTo,
               replyTo: email,
-              subject: `📅 Interview Request: ${role} @ ${company} — ${date} ${time}`,
+              subject: `Scheduled Interview for Shri Pathi G — ${role} at ${company}`,
               html: htmlBody,
-              text: `New Interview Appointment\n\nName: ${name}\nEmail: ${email}\nCompany: ${company}\nRole: ${role}\nDate: ${date}\nTime: ${time}\nDuration: ${d.duration || 60} min\nMode: ${d.mode}\nLink: ${d.meetingLink || 'N/A'}\nNotes: ${d.notes || 'N/A'}`
+              text: `SCHEDULED INTERVIEW FOR SHRI PATHI G\n\nHello Shri Pathi, ${name} from ${company} has requested an interview.\n\nAPPOINTMENT DETAILS\nName: ${name}\nEmail: ${email}\nCompany: ${company}\nRole: ${role}\nDate: ${date}\nTime: ${time}\nDuration: ${d.duration || 60} minutes\nMode: ${d.mode || 'Google Meet'}\n${d.mode === 'In Person' ? 'Venue' : 'Meeting link'}: ${d.meetingLink || 'Not provided'}\nNotes: ${d.notes || 'None'}\n\nPlease review the details and reply directly to the employer if any changes are needed.\n\n— Shri Pathi G Interview Scheduling System`
             });
             emailResult = 'email-sent';
             console.log(`✅ Interview email sent for ${name} (${company})`);

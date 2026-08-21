@@ -86,6 +86,20 @@
   <main>
     <!-- Hero Section -->
     <section class="hero" id="home">
+      <div class="hero-background" aria-hidden="true">
+        <div class="hero-loader">
+          <div class="hero-loader-ring hero-loader-ring--outer"></div>
+          <div class="hero-loader-ring hero-loader-ring--inner"></div>
+          <span class="hero-loader-core"></span>
+          <span class="hero-loader-label">SYSTEM LOADING <b> //</b> <strong>87%</strong></span>
+          <span class="hero-loader-line"></span>
+        </div>
+        <span class="hero-particle hero-particle--1"></span>
+        <span class="hero-particle hero-particle--2"></span>
+        <span class="hero-particle hero-particle--3"></span>
+        <span class="hero-particle hero-particle--4"></span>
+        <span class="hero-particle hero-particle--5"></span>
+      </div>
       <div class="container hero-grid">
         <div class="hero-content">
           <div class="hero-subtag">Hello <span class="dot">.</span></div>
@@ -440,7 +454,7 @@
           </div>
         </div>
         <div class="im-field im-full">
-          <label for="imLink">MEETING LINK</label>
+          <label for="imLink">MEETING LINK <span class="im-req">*</span></label>
           <input type="url" id="imLink" name="meetingLink" placeholder="https://meet.google.com/xxx-xxxx-xxx" />
         </div>
         <div class="im-field im-full">
@@ -454,7 +468,7 @@
           </button>
           <button type="button" class="im-btn-cancel" id="cancelInterviewModal">Cancel</button>
         </div>
-        <p class="im-footnote">Clicking Confirm opens Google Calendar with your event pre-filled to confirm the slot.</p>
+        <p class="im-footnote">Clicking Confirm opens Google Calendar with Shri Pathi G added as an attendee.</p>
         <div id="imStatus" class="im-status" style="display:none;"></div>
       </form>
     </div>
