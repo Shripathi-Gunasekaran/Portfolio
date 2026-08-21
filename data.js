@@ -188,39 +188,6 @@ const PORTFOLIO_DATA = {
       snippet: `Attrition Rate DAX:\nAttrition % = DIVIDE(COUNTROWS(Filter(HR, Attrition="Yes")), COUNTROWS(HR))\nInsight: Sales Dept shows 18% highest attrition risk.`,
       githubUrl: "https://github.com/Shripathi-Gunasekaran",
       liveUrl: "https://github.com/Shripathi-Gunasekaran"
-    },
-    {
-      id: "deloitte-simulation",
-      title: "Data Analytics Job Simulation – Deloitte",
-      category: "Data Analytics",
-      period: "Jul 2025",
-      tags: ["Tableau", "Excel", "Data Analytics", "Anomaly Detection"],
-      description: "Completed a data analytics job simulation with Deloitte Australia (Forage) using Tableau and Excel to uncover operational insights and detect financial anomalies.",
-      snippet: `DELOITTE SIMULATION KPI:\nTotal Records Analyzed: 50,000+\nAnomalies Detected: 14 High-risk transactions\nDashboard Status: COMPLETED & CERTIFIED`,
-      githubUrl: "https://github.com/Shripathi-Gunasekaran",
-      liveUrl: "https://github.com/Shripathi-Gunasekaran"
-    },
-    {
-      id: "ai-healthcare",
-      title: "AI in Healthcare: Diagnosis & Drug Discovery",
-      category: "AI & ML",
-      period: "Mar 2024",
-      tags: ["Artificial Intelligence", "Healthcare", "Research Paper"],
-      description: "Academic paper presentation at Sree Sakthi Engineering College covering AI models for medical image diagnosis and accelerated drug discovery pipelines.",
-      snippet: `RESEARCH HIGHLIGHT:\nModel: Deep Convolutional Neural Network (CNN)\nAccuracy: 96.4% in early diagnostic anomaly detection\nConference: Sree Sakthi Engineering College`,
-      githubUrl: "https://github.com/Shripathi-Gunasekaran",
-      liveUrl: "https://github.com/Shripathi-Gunasekaran"
-    },
-    {
-      id: "smart-trolley-ai",
-      title: "Smart Shopping Trolley using AI",
-      category: "AI & ML",
-      period: "Mar 2025",
-      tags: ["Computer Vision", "AI Retail", "Smart Automation"],
-      description: "Project presentation at Karpagam College of Engineering demonstrating AI-driven automated retail trolley systems for next-generation retail automation.",
-      snippet: `PROJECT DEMO:\nComputer Vision Model: YOLO v8 Real-time Item Scanner\nCheckout Latency: < 1.5 seconds\nPresented at: Karpagam College of Engineering`,
-      githubUrl: "https://github.com/Shripathi-Gunasekaran",
-      liveUrl: "https://github.com/Shripathi-Gunasekaran"
     }
   ],
 
@@ -244,7 +211,19 @@ const PORTFOLIO_DATA = {
       title: "Technical Workshops & Paper Presentations",
       issuer: "Sree Sakthi & Karpagam Colleges of Engineering",
       description: "Participated and presented papers on AI in Healthcare & Smart AI Shopping Trolley Systems."
-    }
+    },
+    {
+    "title": "Python (Basic) Certificate",
+    "issuer": "HackerRank",
+    "date": "20 Apr 2024",
+    "description": "Successfully cleared the HackerRank assessment for Python (Basic)."
+  },
+  {
+    "title": "Introduction to Java",
+    "issuer": "Coursera – LearnQuest",
+    "date": "Sep 1, 2023",
+    "description": "Successfully completed the Introduction to Java online non-credit course authorized by LearnQuest and offered through Coursera."
+  }
   ],
 
   testimonials: [
