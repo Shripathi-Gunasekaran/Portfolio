@@ -582,4 +582,204 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  /* ─────────────────────────────────────────────────────────────
+     INTERVIEW APPOINTMENT MODAL
+     ───────────────────────────────────────────────────────────── */
+  (function initInterviewModal() {
+    const backdrop   = document.getElementById('interviewModalBackdrop');
+    const form       = document.getElementById('interviewForm');
+    const statusBox  = document.getElementById('imStatus');
+    const submitBtn  = document.getElementById('imSubmitBtn');
+    const openBtns   = document.querySelectorAll('[data-open-interview], #openInterviewModal, .openInterviewBtn');
+    const closeBtn   = document.getElementById('closeInterviewModal');
+    const cancelBtn  = document.getElementById('cancelInterviewModal');
+    const dateInput  = document.getElementById('imDate');
+
+    if (!backdrop || !form) return;
+
+    // Set min date to today
+    if (dateInput) {
+      const today = new Date();
+      dateInput.min = today.toISOString().split('T')[0];
+    }
+
+    let previousBodyOverflow = '';
+
+    function openModal() {
+      backdrop.style.display = 'flex';
+      // Force reflow so transition triggers
+      backdrop.offsetHeight;
+      backdrop.classList.add('im-open');
+      backdrop.setAttribute('aria-hidden', 'false');
+      previousBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      backdrop.scrollTop = 0;
+      const modalCard = backdrop.querySelector('.im-card');
+      if (modalCard) modalCard.scrollTop = 0;
+      hideStatus();
+      closeBtn?.focus();
+    }
+
+    function closeModal() {
+      backdrop.classList.remove('im-open');
+      backdrop.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = previousBodyOverflow;
+      setTimeout(() => { backdrop.style.display = 'none'; }, 340);
+    }
+
+    function showStatus(msg, type) {
+      if (!statusBox) return;
+      statusBox.textContent = msg;
+      statusBox.className = 'im-status ' + type;
+      statusBox.style.display = 'block';
+    }
+
+    function hideStatus() {
+      if (statusBox) { statusBox.style.display = 'none'; statusBox.textContent = ''; }
+    }
+
+    // Build Google Calendar URL
+    function buildCalendarUrl(data) {
+      const dur      = parseInt(data.duration, 10) || 60;
+      const startDate = new Date(`${data.date}T${data.time}:00`);
+      const endDate = new Date(startDate.getTime() + dur * 60 * 1000);
+      const calendarDate = (value) => {
+        const pad = (number) => String(number).padStart(2, '0');
+        return `${value.getFullYear()}${pad(value.getMonth() + 1)}${pad(value.getDate())}T${pad(value.getHours())}${pad(value.getMinutes())}00`;
+      };
+      const start = calendarDate(startDate);
+      const end = calendarDate(endDate);
+
+      const title   = encodeURIComponent(`Interview with Shri Pathi G — ${data.role} @ ${data.company}`);
+      const details = encodeURIComponent(
+        `Interviewer: Shri Pathi G\nMode: ${data.mode}\n${data.meetingLink ? 'Link: ' + data.meetingLink : ''}\n${data.notes ? '\nNotes: ' + data.notes : ''}`
+      );
+      const loc = encodeURIComponent(data.meetingLink || data.mode || '');
+
+      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${loc}`;
+    }
+
+    // Send email notification to portfolio owner
+    async function sendEmailNotification(data) {
+      // Local server delivery (works when the portfolio is run with `npm run dev`).
+      try {
+        const res = await fetch('/api/interview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        if (json.delivery === 'email-sent') return true;
+      } catch (e) {
+        console.warn('Local interview email endpoint is unavailable:', e.message);
+      }
+
+      // Static hosts such as Netlify do not run server.js. Web3Forms sends the
+      // appointment to the email account associated with this access key.
+      try {
+        const message = [
+          'NEW INTERVIEW APPOINTMENT',
+          '',
+          `Name: ${data.name}`,
+          `Email: ${data.email}`,
+          `Company: ${data.company}`,
+          `Role: ${data.role}`,
+          `Date: ${data.date}`,
+          `Time: ${data.time}`,
+          `Duration: ${data.duration} minutes`,
+          `Interview mode: ${data.mode}`,
+          `Meeting link: ${data.meetingLink || 'Not provided'}`,
+          '',
+          `Notes: ${data.notes || 'None'}`
+        ].join('\n');
+
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: 'ee50058b-0e40-4b35-8ea5-d912e56e0771',
+            name: data.name,
+            email: data.email,
+            replyto: data.email,
+            subject: `Interview Request: ${data.role} at ${data.company}`,
+            message
+          })
+        });
+        const result = await response.json();
+        return response.ok && result.success === true;
+      } catch (e) {
+        console.warn('Web3Forms interview email failed:', e.message);
+        return false;
+      }
+    }
+
+    // Form submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        name:        document.getElementById('imName')?.value.trim()    || '',
+        email:       document.getElementById('imEmail')?.value.trim()   || '',
+        company:     document.getElementById('imCompany')?.value.trim() || '',
+        role:        document.getElementById('imRole')?.value           || '',
+        date:        document.getElementById('imDate')?.value           || '',
+        time:        document.getElementById('imTime')?.value           || '',
+        duration:    document.getElementById('imDuration')?.value       || '60',
+        mode:        document.getElementById('imMode')?.value           || 'Google Meet',
+        meetingLink: document.getElementById('imLink')?.value.trim()    || '',
+        notes:       document.getElementById('imNotes')?.value.trim()   || ''
+      };
+
+      // Validate required
+      if (!data.name || !data.email || !data.company || !data.role || !data.date || !data.time) {
+        showStatus('⚠ Please fill in all required fields.', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Opening Calendar…';
+
+      // Open Google Calendar
+      const calUrl = buildCalendarUrl(data);
+      window.open(calUrl, '_blank');
+
+      // Send email in background
+      showStatus('✓ Calendar opened! Sending email notification…', 'success');
+      const emailSent = await sendEmailNotification(data);
+
+      if (emailSent) {
+        showStatus('✅ Done! Calendar opened and email sent to Shri Pathi G.', 'success');
+      } else {
+        showStatus('⚠ Calendar opened, but the email could not be delivered. Please try again.', 'error');
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Confirm &amp; Open Calendar';
+
+      // Auto-close after 3s
+      setTimeout(() => {
+        closeModal();
+        form.reset();
+        hideStatus();
+      }, 3200);
+    });
+
+    // Wire buttons
+    openBtns.forEach((button) => button.addEventListener('click', openModal));
+    if (closeBtn)  closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+    // Close on backdrop click
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeModal();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && backdrop.classList.contains('im-open')) closeModal();
+    });
+  })();
+
 });
+

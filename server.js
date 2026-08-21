@@ -245,6 +245,110 @@ function createAppServer() {
       return;
     }
 
+    // ── Interview Appointment Endpoint ──────────────────────────────────
+    if (req.method === 'POST' && url.pathname === '/api/interview') {
+      try {
+        const d = await parseBody(req);
+        const name    = String(d.name    || '').trim();
+        const email   = String(d.email   || '').trim();
+        const company = String(d.company || '').trim();
+        const role    = String(d.role    || '').trim();
+        const date    = String(d.date    || '').trim();
+        const time    = String(d.time    || '').trim();
+
+        if (!name || !email || !company || !role || !date || !time) {
+          sendJson(res, 400, { success: false, message: 'Required fields missing.' });
+          return;
+        }
+
+        // Save to interviews.json
+        const interviewFile = path.join(DATA_DIR, 'interviews.json');
+        ensureDataFile();
+        let interviews = [];
+        try { interviews = JSON.parse(fs.readFileSync(interviewFile, 'utf8') || '[]'); } catch (_) {}
+        const record = { id: crypto.randomUUID(), ...d, createdAt: new Date().toISOString() };
+        interviews.push(record);
+        fs.writeFileSync(interviewFile, JSON.stringify(interviews, null, 2), 'utf8');
+
+        // Send email if SMTP is configured
+        let emailResult = 'saved-only';
+        const smtpHost = process.env.SMTP_HOST;
+        const smtpUser = process.env.SMTP_USER;
+        const smtpPass = process.env.SMTP_PASS;
+        const emailTo  = process.env.EMAIL_TO || smtpUser || 'shrisekar3@gmail.com';
+
+        if (nodemailer && smtpHost && smtpUser && smtpPass) {
+          try {
+            const transporter = nodemailer.createTransport({
+              host: smtpHost,
+              port: Number(process.env.SMTP_PORT || 587),
+              secure: Number(process.env.SMTP_PORT) === 465,
+              auth: { user: smtpUser, pass: smtpPass }
+            });
+
+            const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#0e1014;color:#fff;margin:0;padding:0}
+  .wrap{max-width:580px;margin:0 auto;background:#181b22;border-radius:12px;overflow:hidden;border-top:4px solid #e8394a}
+  .header{background:#e8394a;padding:28px 32px;text-align:center}
+  .header h1{margin:0;font-size:22px;color:#fff;font-weight:800;letter-spacing:0.5px}
+  .header p{margin:6px 0 0;color:rgba(255,255,255,0.85);font-size:14px}
+  .body{padding:28px 32px}
+  .row{display:flex;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:14px}
+  .label{color:#949cae;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;min-width:130px;padding-top:2px}
+  .value{color:#fff;font-size:14px;line-height:1.5}
+  .footer{background:#14171e;padding:18px 32px;text-align:center;font-size:12px;color:#5a6275;border-top:1px solid rgba(255,255,255,0.06)}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>📅 New Interview Appointment</h1>
+    <p>Someone wants to schedule an interview with you</p>
+  </div>
+  <div class="body">
+    <div class="row"><div class="label">Name</div><div class="value">${name}</div></div>
+    <div class="row"><div class="label">Email</div><div class="value"><a href="mailto:${email}" style="color:#e8394a">${email}</a></div></div>
+    <div class="row"><div class="label">Company</div><div class="value">${company}</div></div>
+    <div class="row"><div class="label">Role</div><div class="value">${role}</div></div>
+    <div class="row"><div class="label">Date</div><div class="value">${date}</div></div>
+    <div class="row"><div class="label">Time</div><div class="value">${time}</div></div>
+    <div class="row"><div class="label">Duration</div><div class="value">${d.duration || 60} minutes</div></div>
+    <div class="row"><div class="label">Mode</div><div class="value">${d.mode || 'Google Meet'}</div></div>
+    ${d.meetingLink ? `<div class="row"><div class="label">Meeting Link</div><div class="value"><a href="${d.meetingLink}" style="color:#e8394a">${d.meetingLink}</a></div></div>` : ''}
+    ${d.notes ? `<div class="row"><div class="label">Notes</div><div class="value">${d.notes}</div></div>` : ''}
+  </div>
+  <div class="footer">Portfolio Interview System &nbsp;•&nbsp; Shri Pathi G</div>
+</div>
+</body>
+</html>`;
+
+            await transporter.sendMail({
+              from: `"Portfolio Interview" <${smtpUser}>`,
+              to: emailTo,
+              replyTo: email,
+              subject: `📅 Interview Request: ${role} @ ${company} — ${date} ${time}`,
+              html: htmlBody,
+              text: `New Interview Appointment\n\nName: ${name}\nEmail: ${email}\nCompany: ${company}\nRole: ${role}\nDate: ${date}\nTime: ${time}\nDuration: ${d.duration || 60} min\nMode: ${d.mode}\nLink: ${d.meetingLink || 'N/A'}\nNotes: ${d.notes || 'N/A'}`
+            });
+            emailResult = 'email-sent';
+            console.log(`✅ Interview email sent for ${name} (${company})`);
+          } catch (mailErr) {
+            console.error('Interview email failed:', mailErr.message);
+            emailResult = 'email-failed';
+          }
+        }
+
+        sendJson(res, 200, { success: true, delivery: emailResult });
+      } catch (err) {
+        console.error('Interview API error:', err.message);
+        sendJson(res, 500, { success: false, message: 'Server error.' });
+      }
+      return;
+    }
+
+
     const cleanUrl = url.pathname.split('?')[0];
     const requestPath = cleanUrl === '/' ? '/index.html' : cleanUrl;
     const normalized = path.normalize(requestPath).replace(/^([.][.][/\\])+/, '');

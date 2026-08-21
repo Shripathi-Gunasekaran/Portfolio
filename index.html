@@ -72,8 +72,12 @@
         </ul>
       </nav>
 
-      <div style="display: flex; align-items: center; gap: 0.6rem;">
-        <button type="button" class="btn-book-interview openInterviewBtn"><span>✨</span> Schedule Interview</button>
+      <!-- Schedule Interview Button -->
+      <div class="nav-actions">
+        <button type="button" id="openInterviewModal" class="btn-schedule-interview" data-open-interview aria-haspopup="dialog" aria-controls="interviewModalBackdrop">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Schedule Interview
+        </button>
         <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">☰</button>
       </div>
     </div>
@@ -359,108 +363,105 @@
       </div>
     </div>
   </footer>
-
-  <!-- Interview Appointment Modal Backdrop -->
-  <div id="interviewModal" class="interview-modal-backdrop">
-    <div class="interview-modal-container">
-      <button type="button" class="modal-close-btn closeInterviewBtn" aria-label="Close Modal">✕</button>
-
-      <span class="modal-tag">✦ INTERVIEW APPOINTMENT</span>
-      <h2 class="modal-title">Schedule an Interview</h2>
-      <p class="modal-subtitle">Pick your date, time, company & role — it will be emailed to Shri Pathi G and added to Google Calendar.</p>
-
-      <form id="interviewForm">
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label for="interviewName">YOUR NAME *</label>
-            <input type="text" id="interviewName" name="interviewName" class="form-control" placeholder="John Doe" required />
+  <!-- Interview Appointment Modal -->
+  <div id="interviewModalBackdrop" class="im-backdrop" aria-hidden="true" style="display:none;">
+    <div class="im-card" role="dialog" aria-modal="true" aria-labelledby="imTitle">
+      <button class="im-close" id="closeInterviewModal" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="im-header">
+        <span class="im-badge">INTERVIEW APPOINTMENT</span>
+        <h2 class="im-title" id="imTitle">Schedule an Interview</h2>
+        <p class="im-desc">Fill in the details below — Google Calendar will open with your event pre-filled, and Shri Pathi G will receive an email notification.</p>
+      </div>
+      <form id="interviewForm" novalidate autocomplete="off">
+        <div class="im-row">
+          <div class="im-field">
+            <label for="imName">YOUR NAME <span class="im-req">*</span></label>
+            <input type="text" id="imName" name="name" placeholder="John Doe" required />
           </div>
-
-          <div class="form-group">
-            <label for="interviewEmail">YOUR EMAIL *</label>
-            <input type="email" id="interviewEmail" name="interviewEmail" class="form-control" placeholder="john@example.com" required />
+          <div class="im-field">
+            <label for="imEmail">YOUR EMAIL <span class="im-req">*</span></label>
+            <input type="email" id="imEmail" name="email" placeholder="john@company.com" required />
           </div>
         </div>
-
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label for="interviewCompany">COMPANY *</label>
-            <input type="text" id="interviewCompany" name="interviewCompany" class="form-control" placeholder="Acme Corp" required />
+        <div class="im-row">
+          <div class="im-field">
+            <label for="imCompany">COMPANY <span class="im-req">*</span></label>
+            <input type="text" id="imCompany" name="company" placeholder="Acme Corp" required />
           </div>
-
-          <div class="form-group">
-            <label for="interviewRole">ROLE *</label>
-            <select id="interviewRole" name="interviewRole" class="form-control form-select" required>
+          <div class="im-field">
+            <label for="imRole">ROLE <span class="im-req">*</span></label>
+            <select id="imRole" name="role" required>
               <option value="" disabled selected>Select a role</option>
-              <option value="Software Engineer">Software Engineer</option>
-              <option value="Full Stack Developer">Full Stack Developer</option>
-              <option value="QA / Automation Test Engineer">QA / Automation Test Engineer</option>
-              <option value="Data Analyst / Power BI Engineer">Data Analyst / Power BI Engineer</option>
-              <option value="IoT / Embedded Engineer">IoT / Embedded Engineer</option>
-              <option value="Other Role">Other Role</option>
+              <option>Software Engineer</option>
+              <option>Full Stack Developer</option>
+              <option>Frontend Developer</option>
+              <option>Backend Developer</option>
+              <option>QA / Automation Test Engineer</option>
+              <option>Data Analyst / Power BI Engineer</option>
+              <option>IoT / Embedded Engineer</option>
+              <option>DevOps Engineer</option>
+              <option>Other</option>
             </select>
           </div>
         </div>
-
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label for="interviewDate">DATE *</label>
-            <input type="date" id="interviewDate" name="interviewDate" class="form-control" required />
+        <div class="im-row">
+          <div class="im-field">
+            <label for="imDate">DATE <span class="im-req">*</span></label>
+            <input type="date" id="imDate" name="date" required />
           </div>
-
-          <div class="form-group">
-            <label for="interviewTime">TIME *</label>
-            <input type="time" id="interviewTime" name="interviewTime" class="form-control" required />
+          <div class="im-field">
+            <label for="imTime">TIME <span class="im-req">*</span></label>
+            <input type="time" id="imTime" name="time" required />
           </div>
         </div>
-
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label for="interviewDuration">DURATION</label>
-            <select id="interviewDuration" name="interviewDuration" class="form-control form-select">
+        <div class="im-row">
+          <div class="im-field">
+            <label for="imDuration">DURATION</label>
+            <select id="imDuration" name="duration">
               <option value="15">15 minutes</option>
               <option value="30">30 minutes</option>
               <option value="45">45 minutes</option>
               <option value="60" selected>60 minutes</option>
               <option value="90">90 minutes</option>
+              <option value="120">2 hours</option>
             </select>
           </div>
-
-          <div class="form-group">
-            <label for="interviewMode">INTERVIEW MODE</label>
-            <select id="interviewMode" name="interviewMode" class="form-control form-select">
-              <option value="Google Meet" selected>Google Meet</option>
-              <option value="Zoom">Zoom</option>
-              <option value="Microsoft Teams">Microsoft Teams</option>
-              <option value="Phone Call">Phone Call</option>
-              <option value="In Person">In Person</option>
+          <div class="im-field">
+            <label for="imMode">INTERVIEW MODE</label>
+            <select id="imMode" name="mode">
+              <option>Google Meet</option>
+              <option>Zoom</option>
+              <option>Microsoft Teams</option>
+              <option>Phone Call</option>
+              <option>In Person</option>
             </select>
           </div>
         </div>
-
-        <div class="form-group">
-          <label for="interviewMeetingLink">MEETING LINK *</label>
-          <input type="url" id="interviewMeetingLink" name="interviewMeetingLink" class="form-control" placeholder="https://meet.google.com/..." required />
+        <div class="im-field im-full">
+          <label for="imLink">MEETING LINK</label>
+          <input type="url" id="imLink" name="meetingLink" placeholder="https://meet.google.com/xxx-xxxx-xxx" />
         </div>
-
-        <div class="form-group">
-          <label for="interviewNotes">NOTES</label>
-          <textarea id="interviewNotes" name="interviewNotes" class="form-control" placeholder="Any specific topics, agenda, or instructions..." style="min-height: 90px;"></textarea>
+        <div class="im-field im-full">
+          <label for="imNotes">NOTES</label>
+          <textarea id="imNotes" name="notes" rows="3" placeholder="Topics to discuss, agenda, or any special instructions..."></textarea>
         </div>
-
-        <div class="modal-actions-wrap">
-          <button type="submit" class="btn-confirm-interview">Confirm Interview ✦</button>
-          <button type="button" class="btn-cancel-modal cancelInterviewBtn">Cancel</button>
+        <div class="im-actions">
+          <button type="submit" id="imSubmitBtn" class="im-btn-confirm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Confirm &amp; Open Calendar
+          </button>
+          <button type="button" class="im-btn-cancel" id="cancelInterviewModal">Cancel</button>
         </div>
-
-        <p class="modal-subtext">Booking opens Google Calendar — add it to your calendar to confirm the slot.</p>
-        <div id="interviewStatus" class="form-status-hidden" style="margin-top: 1rem; text-align: center; font-weight: 600;"></div>
+        <p class="im-footnote">Clicking Confirm opens Google Calendar with your event pre-filled to confirm the slot.</p>
+        <div id="imStatus" class="im-status" style="display:none;"></div>
       </form>
     </div>
   </div>
-
   <!-- Scripts -->
   <script src="data.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
