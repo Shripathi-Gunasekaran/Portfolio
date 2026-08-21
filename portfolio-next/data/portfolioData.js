@@ -110,5 +110,17 @@ export const achievementsData = [
     title: "Technical Workshops & Paper Presentations",
     issuer: "Sree Sakthi & Karpagam Colleges of Engineering",
     description: "Participated and presented papers on AI in Healthcare & Smart AI Shopping Trolley Systems."
+  },
+  {
+    title: "Python (Basic) Certificate",
+    issuer: "HackerRank",
+    date: "20 Apr 2024",
+    description: "Successfully cleared the HackerRank assessment for Python (Basic)."
+  },
+  {
+    title: "Introduction to Java",
+    issuer: "Coursera – LearnQuest",
+    date: "Sep 1, 2023",
+    description: "Successfully completed the Introduction to Java online non-credit course authorized by LearnQuest and offered through Coursera."
   }
 ];
