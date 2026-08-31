@@ -127,7 +127,7 @@ loadEnv();
 async function sendContactEmail(payload) {
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const pass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
   const toAddress = process.env.EMAIL_TO || user || 'shrisekar3@gmail.com';
 
   if (!nodemailer || !host || !user || !pass || !toAddress) {
@@ -141,7 +141,8 @@ async function sendContactEmail(payload) {
     auth: {
       user,
       pass
-    }
+    },
+    tls: { rejectUnauthorized: false }
   });
 
   await transporter.sendMail({
@@ -301,7 +302,7 @@ function createAppServer() {
         let emailResult = 'saved-only';
         const smtpHost = process.env.SMTP_HOST;
         const smtpUser = process.env.SMTP_USER;
-        const smtpPass = process.env.SMTP_PASS;
+        const smtpPass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
         const emailTo  = process.env.EMAIL_TO || smtpUser || 'shrisekar3@gmail.com';
 
         if (nodemailer && smtpHost && smtpUser && smtpPass) {
@@ -310,7 +311,8 @@ function createAppServer() {
               host: smtpHost,
               port: Number(process.env.SMTP_PORT || 587),
               secure: Number(process.env.SMTP_PORT) === 465,
-              auth: { user: smtpUser, pass: smtpPass }
+              auth: { user: smtpUser, pass: smtpPass },
+              tls: { rejectUnauthorized: false }
             });
 
             const htmlBody = `

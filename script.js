@@ -405,6 +405,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(payload.email)) {
+        if (status) {
+          status.style.display = 'block';
+          status.style.color = '#fbbf24';
+          status.textContent = 'Please enter a valid email address.';
+        }
+        return;
+      }
+
       if (status) {
         status.style.display = 'block';
         status.style.color = '#f3f4f6';
@@ -800,6 +810,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // Validate required
       if (!data.name || !data.email || !data.company || !data.role || !data.date || !data.time) {
         showStatus('⚠ Please fill in all required fields.', 'error');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        showStatus('⚠ Please enter a valid email address.', 'error');
         return;
       }
 
