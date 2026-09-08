@@ -378,7 +378,14 @@ function createAppServer() {
     }
 
 
-    const cleanUrl = url.pathname.split('?')[0];
+    let cleanUrl;
+    try {
+      cleanUrl = decodeURIComponent(url.pathname.split('?')[0]);
+    } catch (_) {
+      res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('400 Invalid URL');
+      return;
+    }
     const requestPath = cleanUrl === '/' ? '/index.html' : cleanUrl;
     const normalized = path.normalize(requestPath).replace(/^([.][.][/\\])+/, '');
     const filePath = path.join(ROOT, normalized);

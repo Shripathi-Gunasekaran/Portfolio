@@ -2,12 +2,12 @@ import './globals.css';
 import { personalInfo } from '@/data/portfolioData';
 
 export const metadata = {
-  title: `${personalInfo.name} | Software Engineer Portfolio`,
+  title: `${personalInfo.name} | Full Stack Developer and Hardware Engineer`,
   description: personalInfo.subtitle,
-  keywords: ['Software Engineer', 'Portfolio', 'React', 'Next.js', 'Web Development', 'Tamil Nadu'],
+  keywords: ['Full Stack Developer', 'Hardware Engineer', 'Automation Testing', 'Data Analytics', 'Portfolio', 'Tamil Nadu'],
   authors: [{ name: personalInfo.name }],
   openGraph: {
-    title: `${personalInfo.name} | Software Engineer Portfolio`,
+    title: `${personalInfo.name} | Full Stack Developer and Hardware Engineer`,
     description: personalInfo.subtitle,
     type: 'website',
   },

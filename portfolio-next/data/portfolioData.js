@@ -1,9 +1,9 @@
 export const personalInfo = {
   name: "Shri Pathi G",
-  role: "Software Developer / QA Engineer / Full-Stack Developer",
+  role: "Full Stack Developer",
   subtag: "Hello .",
-  subtitle: "Computer Science Engineering graduate specializing in Software Development, QA Testing, IoT, and Data Analytics.",
-  aboutText: "I am a Computer Science Engineering graduate with hands-on experience in software development, testing, IoT, and data analytics. During my internship at Yectra Technologies, I worked on real-time projects involving frontend development, API integration, and software testing. I am passionate about building practical solutions, learning emerging technologies, and contributing to impactful projects.",
+  subtitle: "Computer Science Engineering graduate focused on Full Stack Development, Hardware Engineering, Automation Testing, and Data Analytics.",
+  aboutText: "I am a Computer Science Engineering graduate with hands-on experience across full stack development, hardware and IoT systems, automation testing, and data analytics. I build practical applications, validate real-world workflows, work with sensors and embedded systems, and turn data into useful dashboards and decisions.",
   degree: "B.E. Computer Science and Engineering (2022 - 2026)",
   college: "Dr. Mahalingam College of Engineering and Technology, Pollachi",
   location: "Bhavani, Tamil Nadu",
@@ -11,7 +11,7 @@ export const personalInfo = {
   email: "shrisekar3@gmail.com",
   github: "https://github.com/Shripathi-Gunasekaran",
   linkedin: "https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1",
-  resume: "/assets/Shri_Pathi Software_Engineer.pdf",
+  resume: "/assets/Shri_Pathi_Software_Engineer.pdf",
   profileImage: "/assets/image.png",
   logoImage: "/assets/name.png"
 };
@@ -33,6 +33,7 @@ export const statsData = [
 export const categorizedSkills = {
   "Development": ["React", "Next.js", "TypeScript", "JavaScript", "Python", "C/C++", "Java", "HTML5", "CSS3"],
   "Testing": ["Cypress", "Selenium", "Manual Testing", "UI Testing", "API Testing"],
+  "Hardware & Embedded": ["Arduino", "Embedded C++", "Sensors", "IoT", "Real-time Monitoring"],
   "Data & AI": ["Power BI", "Machine Learning", "Generative AI", "Tableau", "Excel"],
   "Cloud & Tools": ["AWS", "Git", "GitHub", "Linux", "Docker", "N8N", "Flowise"],
   "Databases": ["SQL", "MongoDB"]
@@ -40,7 +41,7 @@ export const categorizedSkills = {
 
 export const techStack = [
   "React", "Next.js", "TypeScript", "JavaScript", "Python", "C/C++", "Java",
-  "Cypress", "Selenium", "Manual Testing", "Power BI", "Machine Learning",
+  "Cypress", "Selenium", "Manual Testing", "Arduino", "Embedded C++", "Sensors", "IoT", "Power BI", "Machine Learning",
   "Generative AI", "AWS", "Git", "GitHub", "Linux", "Docker", "SQL", "MongoDB"
 ];
 

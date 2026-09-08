@@ -179,6 +179,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (document.getElementById('resumeBtn')) document.getElementById('resumeBtn').href = personal.resume;
       if (document.getElementById('heroAvatar')) document.getElementById('heroAvatar').src = personal.avatar;
 
+      const hiringProfileGrid = document.getElementById('hiringProfileGrid');
+      if (hiringProfileGrid && personal.hiringProfile) {
+        const profile = personal.hiringProfile;
+        hiringProfileGrid.innerHTML = `
+          <div class="hiring-profile-card hiring-profile-card-featured">
+            <span class="profile-card-label">WHY HIRE ME</span>
+            <p>${profile.whyHireMe}</p>
+          </div>
+          <div class="hiring-profile-card"><span class="profile-card-label">AVAILABILITY</span><strong>${profile.availability}</strong><span>${profile.noticePeriod}</span></div>
+          <div class="hiring-profile-card"><span class="profile-card-label">TARGET ROLES</span><div class="profile-tags">${profile.targetRoles.map(role => `<span>${role}</span>`).join('')}</div></div>
+          <div class="hiring-profile-card"><span class="profile-card-label">WORK PREFERENCE</span><strong>${profile.workPreference}</strong><span>${profile.graduation}</span></div>
+        `;
+      }
+
       const contactPhone = document.getElementById('contactPhone');
       if (contactPhone) contactPhone.textContent = personal.phone;
       const contactEmail = document.getElementById('contactEmail');
@@ -194,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const categoryIcons = {
         "Development": "💻",
         "Testing": "🧪",
+        "Hardware & Embedded": "⚙️",
         "Data & AI": "📊",
         "Cloud & Tools": "☁️",
         "Databases": "🗄️"
@@ -249,6 +264,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="timeline-period">${exp.period}</span>
           </div>
           <p class="timeline-desc">${exp.description}</p>
+          ${exp.tools ? `<div class="timeline-meta"><strong>Tools:</strong> ${exp.tools}</div>` : ''}
+          ${exp.impact ? `<div class="timeline-meta"><strong>Contribution:</strong> ${exp.impact}</div>` : ''}
         </div>
       `).join('');
     }
@@ -273,12 +290,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const achievementsGrid = document.getElementById('achievementsGrid');
     if (achievementsGrid && achievements) {
       achievementsGrid.innerHTML = achievements.map(ach => `
-        <div class="achievement-card">
-          <div class="achievement-badge">🏆</div>
+        <article class="achievement-card">
+          <div class="achievement-card-top">
+            <div class="achievement-badge" aria-hidden="true">🏆</div>
+            ${ach.date ? `<time class="achievement-date">${ach.date}</time>` : ''}
+          </div>
           <h3 class="achievement-title">${ach.title}</h3>
           <div class="achievement-issuer">${ach.issuer}</div>
+          ${ach.eventName || ach.organizer ? `<div class="achievement-context">${ach.eventName ? `<span>${ach.eventName}</span>` : ''}${ach.organizer ? `<span>${ach.organizer}</span>` : ''}</div>` : ''}
           <p class="achievement-desc">${ach.description}</p>
-        </div>
+          <div class="achievement-actions">
+            ${ach.evidenceUrl ? `<a class="achievement-action" href="${ach.evidenceUrl}" target="_blank" rel="noopener noreferrer">View evidence <span>↗</span></a>` : ''}
+            ${ach.certificateUrl ? `<a class="achievement-action" href="${ach.certificateUrl}" target="_blank" rel="noopener noreferrer">View certificate <span>↗</span></a>` : ''}
+            ${ach.proceedingsUrl ? `<a class="achievement-action" href="${ach.proceedingsUrl}" target="_blank" rel="noopener noreferrer">View proceedings <span>↗</span></a>` : ''}
+          </div>
+          ${!ach.evidenceUrl && !ach.certificateUrl && !ach.proceedingsUrl && ach.evidenceLabel ? `<span class="achievement-proof-note">${ach.evidenceLabel}</span>` : ''}
+        </article>
       `).join('');
     }
 
@@ -323,12 +350,44 @@ document.addEventListener('DOMContentLoaded', () => {
           ${p.snippet ? `<div class="project-preview" style="font-size: 0.78rem; margin-bottom: 1rem;">${p.snippet}</div>` : ''}
 
           <div class="project-actions" style="margin-top: auto; display: flex; gap: 0.6rem;">
-            <a href="${p.githubUrl}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="flex: 1; text-align: center; font-size: 0.8rem; padding: 0.4rem 0.6rem;">View Github</a>
-            <a href="${p.liveUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="flex: 1; text-align: center; font-size: 0.8rem; padding: 0.4rem 0.6rem;">View Project ↗</a>
+            ${p.githubUrl ? `<a href="${p.githubUrl}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="flex: 1; text-align: center; font-size: 0.8rem; padding: 0.4rem 0.6rem;">View Github</a>` : '<span class="link-pending">Repository link pending</span>'}
           </div>
         </div>
       `).join('');
     }
+
+    // Full project case studies
+    const caseStudiesGrid = document.getElementById('caseStudiesGrid');
+    if (caseStudiesGrid && projects) {
+      caseStudiesGrid.innerHTML = projects.map(project => `
+        <article class="case-study-card">
+          <div class="case-study-header">
+            <div>
+              <span class="case-study-category">${project.category}</span>
+              <h3>${project.title}</h3>
+            </div>
+            <span class="case-study-period">${project.period}</span>
+          </div>
+          <div class="case-study-tags">${project.tags.map(tag => `<span>${tag}</span>`).join('')}</div>
+          <div class="case-study-grid">
+            <div><span>Problem & users</span><p>${project.problem} ${project.users}</p></div>
+            <div><span>Architecture / workflow</span><p>${project.workflow}</p></div>
+            <div><span>Technologies used</span><p>${project.technologies || project.tags.join(', ')}</p></div>
+            <div><span>My role & contribution</span><p>${project.role}. ${project.contribution}</p></div>
+            <div><span>Result</span><p>${project.result}</p></div>
+          </div>
+          <div class="case-study-links">
+            ${project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">GitHub repository ↗</a>` : '<span class="link-pending">GitHub repository pending</span>'}
+            ${project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer">Live demo ↗</a>` : '<span class="link-pending">Live demo not available</span>'}
+            ${project.documentationUrl ? `<a href="${project.documentationUrl}" target="_blank" rel="noopener noreferrer">Documentation ↗</a>` : '<span class="link-pending">Documentation link pending</span>'}
+            ${project.image ? `<a href="${project.image}" target="_blank" rel="noopener noreferrer">Screenshots ↗</a>` : '<span class="link-pending">Screenshots pending</span>'}
+          </div>
+        </article>
+      `).join('');
+    }
+
+    const responseTime = document.getElementById('contactResponseTime');
+    if (responseTime && personal.hiringProfile) responseTime.textContent = personal.hiringProfile.responseTime;
 
     // Testimonials Slider
     if (testimonials && testimonials.length > 0) {
@@ -339,10 +398,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!testimonialContainer || !testimonials[index]) return;
         const t = testimonials[index];
         testimonialContainer.innerHTML = `
-          <div class="rating-stars">${'★'.repeat(t.rating)}</div>
-          <p class="quote-text">"${t.quote}"</p>
-          <div class="client-name">${t.name}</div>
-          <div class="client-role">${t.role}</div>
+          <div class="testimonial-card-topline">
+            <span class="testimonial-kicker">${t.label || 'VERIFIED FEEDBACK'}</span>
+            <span class="testimonial-count">${String(index + 1).padStart(2, '0')} / ${String(testimonials.length).padStart(2, '0')}</span>
+          </div>
+          <div class="testimonial-quote-mark" aria-hidden="true">“</div>
+          <div class="rating-row"><div class="rating-stars" aria-label="${t.rating} out of 5 stars">${'★'.repeat(t.rating)}${'☆'.repeat(5 - t.rating)}</div><span>${t.rating}.0 / 5.0</span></div>
+          <blockquote class="quote-text">${t.quote}</blockquote>
+          <div class="testimonial-attribution">
+            <div class="client-avatar" aria-hidden="true">${t.name.charAt(0)}</div>
+            <div><div class="client-name">${t.name}</div><div class="client-role">${t.role}</div></div>
+          </div>
         `;
       }
 

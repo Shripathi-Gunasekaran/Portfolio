@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Contact Shri Pathi G - Software Engineer" />
+  <meta name="description" content="Contact Shri Pathi G - Full Stack Developer, Hardware Engineer, Automation Testing, and Data Analytics professional" />
   <title>Contact | Shri Pathi G</title>
   
   <!-- Google Fonts -->
@@ -79,7 +79,7 @@
     </div>
   </header>
 
-  <main style="padding-top: 6rem;">
+  <main class="page-main">
     <section class="contact-section">
       <div class="container">
         <div class="contact-grid">
@@ -87,7 +87,7 @@
             <span class="section-tag">CONTACTS</span>
             <h3 class="contact-info-title">Have a project?<br />Let's talk!</h3>
             <p class="contact-info-desc">
-              I am available for full-time software engineering roles and project collaborations. Feel free to connect!
+              I am available for full-time Full Stack Developer, Hardware Engineer, Automation Testing, and Data Analytics roles, as well as project collaborations. Feel free to connect!
             </p>
 
             <div class="contact-detail-item">
@@ -111,6 +111,23 @@
               <div>
                 <strong>Location</strong><br />
                 Tamil Nadu, India
+              </div>
+            </div>
+
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon">in</div>
+              <div>
+                <strong>LinkedIn</strong><br />
+                <a href="https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1" target="_blank" rel="noopener noreferrer">Connect with me on LinkedIn</a>
+              </div>
+            </div>
+
+            <div class="contact-detail-item contact-availability">
+              <div class="contact-detail-icon">↗</div>
+              <div>
+                <strong>Resume & availability</strong><br />
+                <a href="assets/Shri_Pathi_Software_Engineer.pdf" download="Shri_Pathi_Software_Engineer.pdf">Download my resume</a>
+                <small>I usually respond within 1–2 business days.</small>
               </div>
             </div>
           </div>
@@ -141,7 +158,7 @@
                   <option value="Full-Stack Development">Full-Stack Development</option>
                   <option value="QA Engineering & Automation Testing">QA Engineering & Automation Testing</option>
                   <option value="Data Analytics & Power BI">Data Analytics & Power BI</option>
-                  <option value="IoT & Cloud Engineering">IoT & Cloud Engineering</option>
+                  <option value="Hardware Engineering">Hardware Engineering</option>
                   <option value="Other / General Inquiry">Other / General Inquiry</option>
                 </select>
               </div>
@@ -163,27 +180,18 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-content">
-        <div class="brand-logo">
-          <img src="assets/name.png" alt="Shri Pathi Logo" class="footer-logo-img" />
-        </div>
-        <p class="footer-tagline">Building scalable, elegant digital solutions.</p>
-
-        <div class="footer-socials">
-          <a href="mailto:shrisekar3@gmail.com" class="social-circle" aria-label="Email">✉</a>
-          <a href="https://github.com/Shripathi-Gunasekaran" target="_blank" rel="noopener" class="social-circle" aria-label="GitHub">GH</a>
-          <a href="https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1" target="_blank" rel="noopener" class="social-circle" aria-label="LinkedIn">IN</a>
-        </div>
-
-        <div class="footer-copy">
-          © <span id="year">2026</span> Shri Pathi G. All rights reserved.
-        </div>
+      <div class="footer-main">
+        <div class="footer-identity"><a href="index.html#home" class="footer-brand"><img src="assets/name.png" alt="Shri Pathi Logo" class="footer-logo-img" /></a><p class="footer-tagline">Full Stack Developer, Hardware Engineer, Automation Testing, and Data Analytics.</p><div class="footer-socials"><a href="mailto:shrisekar3@gmail.com" class="social-circle" aria-label="Email">✉</a><a href="https://github.com/Shripathi-Gunasekaran" target="_blank" rel="noopener" class="social-circle" aria-label="GitHub">GH</a><a href="https://linkedin.com/in/shripathi-gunasekaran-5bb7732b1" target="_blank" rel="noopener" class="social-circle" aria-label="LinkedIn">IN</a></div></div>
+        <nav class="footer-nav" aria-label="Footer navigation"><span class="footer-heading">Explore</span><a href="index.html#about">About</a><a href="index.html#experience">Experience</a><a href="index.html#projects">Projects</a><a href="index.html#case-studies">Case Studies</a></nav>
+        <div class="footer-cta"><span class="footer-heading">Let’s build something useful</span><p>Open to full-time roles and practical collaborations.</p><a href="contact.html" class="footer-contact-link">Start a conversation <span>↗</span></a></div>
+      </div>
+      <div class="footer-bottom"><div class="footer-copy">© <span id="year">2026</span> Shri Pathi G. All rights reserved.</div><a href="assets/Shri_Pathi_Software_Engineer.pdf" download="Shri_Pathi_Software_Engineer.pdf" class="footer-resume">Download resume ↗</a></div>
       </div>
     </div>
   </footer>
 
   <!-- Interview Appointment Backdrop -->
-  <div id="interviewModalBackdrop" class="im-backdrop" aria-hidden="true" style="display:none;">
+  <div id="interviewModalBackdrop" class="im-backdrop" aria-hidden="true">
     <div class="im-card" role="dialog" aria-modal="true" aria-labelledby="imTitle">
       <button class="im-close" id="closeInterviewModal" type="button" aria-label="Close interview appointment form">×</button>
       <div class="im-header">
@@ -198,7 +206,7 @@
         </div>
         <div class="im-row">
           <div class="im-field"><label for="imCompany">COMPANY <span class="im-req">*</span></label><input type="text" id="imCompany" name="company" placeholder="Acme Corp" required /></div>
-          <div class="im-field"><label for="imRole">ROLE <span class="im-req">*</span></label><select id="imRole" name="role" required><option value="" disabled selected>Select a role</option><option>Software Engineer</option><option>Full Stack Developer</option><option>Frontend Developer</option><option>Backend Developer</option><option>QA / Automation Test Engineer</option><option>Data Analyst / Power BI Engineer</option><option>IoT / Embedded Engineer</option><option>DevOps Engineer</option><option>Other</option></select></div>
+          <div class="im-field"><label for="imRole">ROLE <span class="im-req">*</span></label><select id="imRole" name="role" required><option value="" disabled selected>Select a role</option><option>Full Stack Developer</option><option>Hardware Engineer</option><option>Automation Test Engineer</option><option>Data Analyst / Power BI Engineer</option><option>Other</option></select></div>
         </div>
         <div class="im-row">
           <div class="im-field"><label for="imDate">DATE <span class="im-req">*</span></label><input type="date" id="imDate" name="date" required /></div>
@@ -212,7 +220,7 @@
         <div class="im-field im-full"><label for="imNotes">NOTES</label><textarea id="imNotes" name="notes" rows="3" placeholder="Topics to discuss, agenda, or any special instructions..."></textarea></div>
         <div class="im-actions"><button type="submit" id="imSubmitBtn" class="im-btn-confirm">✓ Confirm &amp; Open Calendar</button><button type="button" class="im-btn-cancel" id="cancelInterviewModal">Cancel</button></div>
         <p class="im-footnote">Clicking Confirm opens Google Calendar with Shri Pathi G added as an attendee.</p>
-        <div id="imStatus" class="im-status" style="display:none;" role="status"></div>
+        <div id="imStatus" class="im-status" role="status"></div>
       </form>
     </div>
   </div>
