@@ -128,9 +128,10 @@ async function sendContactEmail(payload) {
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
   const pass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
-  const toAddress = process.env.EMAIL_TO || user || 'shrisekar3@gmail.com';
+  const ownerAddress = process.env.EMAIL_TO || user || 'shrisekar3@gmail.com';
+  const recipientAddress = String(payload.email || '').trim();
 
-  if (!nodemailer || !host || !user || !pass || !toAddress) {
+  if (!nodemailer || !host || !user || !pass || !ownerAddress || !recipientAddress) {
     return { status: 'saved-only' };
   }
 
@@ -147,7 +148,8 @@ async function sendContactEmail(payload) {
 
   await transporter.sendMail({
     from: user,
-    to: toAddress,
+    to: recipientAddress,
+    ...(recipientAddress.toLowerCase() !== ownerAddress.toLowerCase() ? { cc: ownerAddress } : {}),
     replyTo: payload.email,
     subject: `Project Enquiry for Shri Pathi G — ${payload.service || payload.subject || 'General Collaboration'}`,
     text: `Hello Shri Pathi,\n\n${payload.name} has submitted a new project enquiry through your portfolio.\n\nCONTACT DETAILS\nName: ${payload.name}\nEmail: ${payload.email}\nWhatsApp: ${payload.phone || 'Not provided'}\nService requested: ${payload.service || 'General enquiry'}\n\nMESSAGE\n${payload.message}\n\nPlease reply directly to this email to continue the conversation.\n\n— Shri Pathi G Portfolio Contact System`
@@ -303,7 +305,7 @@ function createAppServer() {
         const smtpHost = process.env.SMTP_HOST;
         const smtpUser = process.env.SMTP_USER;
         const smtpPass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
-        const emailTo  = process.env.EMAIL_TO || smtpUser || 'shrisekar3@gmail.com';
+        const ownerAddress = process.env.EMAIL_TO || smtpUser || 'shrisekar3@gmail.com';
 
         if (nodemailer && smtpHost && smtpUser && smtpPass) {
           try {
@@ -355,7 +357,8 @@ function createAppServer() {
 
             await transporter.sendMail({
               from: `"Portfolio Interview" <${smtpUser}>`,
-              to: emailTo,
+              to: email,
+              ...(email.toLowerCase() !== ownerAddress.toLowerCase() ? { cc: ownerAddress } : {}),
               replyTo: email,
               subject: `Scheduled Interview for Shri Pathi G — ${role} at ${company}`,
               html: htmlBody,
