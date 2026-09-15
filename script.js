@@ -214,16 +214,16 @@ document.addEventListener('DOMContentLoaded', () => {
         "Databases": "🗄️"
       };
 
-      categorizedSkillsGrid.innerHTML = Object.entries(categorizedSkills).map(([categoryName, skillList]) => `
-        <div class="achievement-card" style="background: rgba(24, 27, 34, 0.6); border-color: rgba(255,255,255,0.08);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">${categoryIcons[categoryName] || '🚀'}</div>
-          <h3 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--text-white); margin-bottom: 1rem; font-weight: 700;">${categoryName}</h3>
-          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+      categorizedSkillsGrid.innerHTML = Object.entries(categorizedSkills).map(([categoryName, skillList], index) => `
+        <article class="skill-category-card">
+          <div class="skill-category-top"><span class="skill-category-number">${String(index + 1).padStart(2, '0')}</span><span class="skill-category-icon" aria-hidden="true">${categoryIcons[categoryName] || '🚀'}</span></div>
+          <h3 class="skill-category-title">${categoryName}</h3>
+          <div class="skill-category-list">
             ${skillList.map(skill => `
-              <span class="tag-badge" style="font-size: 0.8rem; padding: 0.25rem 0.7rem; background: rgba(232, 57, 74, 0.12); color: #fff; border-color: rgba(232, 57, 74, 0.25);">${skill}</span>
+              <span class="skill-chip">${skill}</span>
             `).join('')}
           </div>
-        </div>
+        </article>
       `).join('');
     }
 
@@ -254,8 +254,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Experience Timeline
     const experienceGrid = document.getElementById('experienceGrid');
     if (experienceGrid && experience) {
-      experienceGrid.innerHTML = experience.map(exp => `
-        <div class="timeline-card">
+      experienceGrid.innerHTML = experience.map((exp, index) => `
+        <article class="timeline-card">
+          <span class="timeline-index">${String(index + 1).padStart(2, '0')}</span>
           <div class="timeline-header">
             <div>
               <h3 class="timeline-role">${exp.role}</h3>
@@ -266,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p class="timeline-desc">${exp.description}</p>
           ${exp.tools ? `<div class="timeline-meta"><strong>Tools:</strong> ${exp.tools}</div>` : ''}
           ${exp.impact ? `<div class="timeline-meta"><strong>Contribution:</strong> ${exp.impact}</div>` : ''}
-        </div>
+        </article>
       `).join('');
     }
 
@@ -274,11 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const educationGrid = document.getElementById('educationGrid');
     if (educationGrid && education) {
       educationGrid.innerHTML = education.map(edu => `
-        <div class="timeline-card" style="border-left-color: #60a5fa;">
+        <div class="timeline-card timeline-card-education">
           <div class="timeline-header">
             <div>
               <h3 class="timeline-role">${edu.degree}</h3>
-              <div class="timeline-company" style="color: #60a5fa;">${edu.institution}</div>
+              <div class="timeline-company timeline-company-education">${edu.institution}</div>
             </div>
             <span class="timeline-period">${edu.period}</span>
           </div>
@@ -289,11 +290,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Achievements
     const achievementsGrid = document.getElementById('achievementsGrid');
     if (achievementsGrid && achievements) {
-      achievementsGrid.innerHTML = achievements.map(ach => `
-        <article class="achievement-card">
+      achievementsGrid.innerHTML = achievements.map((ach, index) => {
+        const isAward = /prize|award|win/i.test(ach.title);
+        const isPublication = /paper|monitoring system|conference|symposium/i.test(`${ach.title} ${ach.issuer}`);
+        const type = isAward ? 'AWARD' : isPublication ? 'PUBLICATION' : /workshop|webinar|visit|simulation/i.test(ach.title) ? 'EXPERIENCE' : 'CERTIFICATION';
+        return `
+        <article class="achievement-card ${isAward ? 'achievement-card-featured' : ''}">
           <div class="achievement-card-top">
-            <div class="achievement-badge" aria-hidden="true">🏆</div>
-            ${ach.date ? `<time class="achievement-date">${ach.date}</time>` : ''}
+            <div class="achievement-card-mark"><span class="achievement-number">${String(index + 1).padStart(2, '0')}</span><div class="achievement-badge" aria-hidden="true">${isAward ? '🏆' : isPublication ? '◈' : '✦'}</div></div>
+            <span class="achievement-type">${type}</span>
           </div>
           <h3 class="achievement-title">${ach.title}</h3>
           <div class="achievement-issuer">${ach.issuer}</div>
@@ -306,7 +311,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           ${!ach.evidenceUrl && !ach.certificateUrl && !ach.proceedingsUrl && ach.evidenceLabel ? `<span class="achievement-proof-note">${ach.evidenceLabel}</span>` : ''}
         </article>
-      `).join('');
+      `;
+      }).join('');
     }
 
     // Stats Grid
@@ -354,17 +360,30 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `).join('');
+
+      const projectSummary = document.getElementById('projectSummary');
+      if (projectSummary) {
+        const categories = [...new Set(projects.map(project => project.category))];
+        projectSummary.innerHTML = `
+          <div><strong>${String(projects.length).padStart(2, '0')}</strong><span>selected builds</span></div>
+          <div><strong>${String(categories.length).padStart(2, '0')}</strong><span>focus areas</span></div>
+          <a href="#case-studies">Read the build stories <span>↓</span></a>
+        `;
+      }
     }
 
     // Full project case studies
     const caseStudiesGrid = document.getElementById('caseStudiesGrid');
     if (caseStudiesGrid && projects) {
-      caseStudiesGrid.innerHTML = projects.map(project => `
-        <article class="case-study-card">
+      caseStudiesGrid.innerHTML = projects.map((project, index) => `
+        <article class="case-study-card ${index === 0 ? 'case-study-card-featured' : ''}">
           <div class="case-study-header">
-            <div>
+            <div class="case-study-title-wrap">
+              <span class="case-study-number">${String(index + 1).padStart(2, '0')}</span>
+              <div>
               <span class="case-study-category">${project.category}</span>
               <h3>${project.title}</h3>
+              </div>
             </div>
             <span class="case-study-period">${project.period}</span>
           </div>
@@ -374,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div><span>Architecture / workflow</span><p>${project.workflow}</p></div>
             <div><span>Technologies used</span><p>${project.technologies || project.tags.join(', ')}</p></div>
             <div><span>My role & contribution</span><p>${project.role}. ${project.contribution}</p></div>
-            <div><span>Result</span><p>${project.result}</p></div>
+            <div class="case-study-outcome"><span>Outcome</span><p>${project.result}</p></div>
           </div>
           <div class="case-study-links">
             ${project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">GitHub repository ↗</a>` : '<span class="link-pending">GitHub repository pending</span>'}
